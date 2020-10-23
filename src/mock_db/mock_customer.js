@@ -24,6 +24,11 @@ const Customers = [
         model:"Persona",
         phoneNo:"+60143360623",
         plateNumber:"VBT7293"
+    },{
+        name:"EUNICE CHANG HUI YEN",
+        model:"Persona",
+        phoneNo:"+60143360623",
+        plateNumber:"VBT7293"
     },
 ]
 
