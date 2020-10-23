@@ -1,0 +1,25 @@
+{
+  "name": "car-servicing-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Five-Fishes/On-Demand-Car-Servicing-Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Five-Fishes/On-Demand-Car-Servicing-Backend/issues"
+  },
+  "homepage": "https://github.com/Five-Fishes/On-Demand-Car-Servicing-Backend#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.6"
+  },
+  "type": "module"
+}
