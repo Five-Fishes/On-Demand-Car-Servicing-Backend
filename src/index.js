@@ -2,7 +2,7 @@ import express from 'express';
 import {customers} from './mock_db/mock_customer.js';
 
 const app = express();
-const port = 3000
+const port = 3000 //TODO@LUXIANZE: #5 Move this to config file 
 
 app.get('/', (req, res) => {
     const responseData = JSON.stringify(customers);
