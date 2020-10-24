@@ -1,6 +1,6 @@
 const Customers = [
     {
-        name:"LU XIANZE",
+        name:"LU XIANZEE",
         model:"Persona",
         phoneNo:"+60143360623",
         plateNumber:"VBT7293"
