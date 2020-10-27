@@ -36,7 +36,7 @@ const Customers = [
         plateNumber:"VBT7293"
     },{
         name:"Hello",
-        model:"Persona",
+        model:"Range Rover",
         phoneNo:"+60143360623",
         plateNumber:"VBT7293"
     }
