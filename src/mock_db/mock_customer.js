@@ -35,7 +35,7 @@ const Customers = [
         phoneNo:"+60143360623",
         plateNumber:"VBT7293"
     },{
-        name:"Mr Steal Your Girl",
+        name:"Hello",
         model:"Persona",
         phoneNo:"+60143360623",
         plateNumber:"VBT7293"
