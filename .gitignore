@@ -1,1 +1,11 @@
+# Node Libraries
 /node_modules
+
+# IDE Config Files/Folder
+.vscode
+
+# Mac OS files
+.DS_Store
+
+# Environment file
+.env
