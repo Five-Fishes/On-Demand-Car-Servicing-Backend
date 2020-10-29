@@ -6,7 +6,6 @@ const { config } = pkg;
 config()
 
 const app = express();
-//TODO@LUXIANZE: #5 Move this to config file 
 
 app.get('/', (req, res) => {
     const responseData = JSON.stringify(customers);
