@@ -29,6 +29,10 @@ code "path to project"
 ``` 
 npm i 
 ``` 
+- After installing all the dependencies, you should also configure the port number for the project by:
+  - Creat a file with name ```.env```
+  - Copy content of ```.env.example```
+  - Fill in the desired port number, ie : PORT=3000
 
 ## Development
 To start the server locally, do:
