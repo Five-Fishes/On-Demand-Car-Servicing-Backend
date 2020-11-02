@@ -1,17 +1,23 @@
 import express from 'express';
 import {customers} from './mock_db/mock_customer.js';
-import pkg from 'dotenv';
+import {ApolloServer, gql} from 'apollo-server-express';
+import dotenv from 'dotenv'
 
-const { config } = pkg;
-config()
+dotenv.config()
 
+const typeDefs = gql`
+  type Query {
+    hello: String
+  }
+`;
+
+const server = new ApolloServer({
+  typeDefs,
+  mocks: true,
+});
 const app = express();
-
-app.get('/', (req, res) => {
-    const responseData = JSON.stringify(customers);
-    res.send(responseData);
-})
+server.applyMiddleware({app})
 
 app.listen(process.env.PORT, () => {
-  console.log(`Example app listening at http://localhost:${process.env.PORT}`)
+  console.log(`🚀 Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`)
 })
