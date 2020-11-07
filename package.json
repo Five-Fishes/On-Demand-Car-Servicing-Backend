@@ -8,6 +8,7 @@
     "dev": "npx nodemon -r esm .",
     "debug": "node --nolazy index.js"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Five-Fishes/On-Demand-Car-Servicing-Backend.git"

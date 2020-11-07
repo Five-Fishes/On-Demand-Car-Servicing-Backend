@@ -1,7 +1,9 @@
 import express from 'express';
 import {customers} from './mock_db/mock_customer.js';
-import {ApolloServer, gql} from 'apollo-server-express';
+import appollo from 'apollo-server-express';
 import dotenv from 'dotenv'
+
+const {ApolloServer, gql} = appollo;
 
 dotenv.config()
 
