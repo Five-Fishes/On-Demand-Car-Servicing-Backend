@@ -1,0 +1,138 @@
+{
+    "Users":[
+        {
+            "Type":"string",
+            "Name":"string",
+            "IP":"string",
+            "Vehicle Table":{
+
+            },
+            "User Table":{
+
+            },
+            "Employee Table":{
+
+            },
+            "Favourite Branch":[
+                {
+                    
+                }
+            ]
+        }
+    ],
+    "Branches":[
+        {
+            "Company Id":"string",
+            "Branch Table":"Exclude In house service, use hasDispatch only",
+            "Business hours":{
+                "Mon": {
+                    "Open":"Time",
+                    "Break":"Time",
+                    "Close":"Time"
+                },"Tue": {
+                    "Open":"Time",
+                    "Break":"Time",
+                    "Close":"Time"
+                },
+                "Wed": {
+                    "Open":"Time",
+                    "Break":"Time",
+                    "Close":"Time"
+                },
+                "Thu": {
+                    "Open":"Time",
+                    "Break":"Time",
+                    "Close":"Time"
+                },
+                "Fri": {
+                    "Open":"Time",
+                    "Break":"Time",
+                    "Close":"Time"
+                },
+                "Sat": {
+                    "Open":"Time",
+                    "Break":"Time",
+                    "Close":"Time"
+                },
+                "Sun": {
+                    "Open":"Time",
+                    "Break":"Time",
+                    "Close":"Time"
+                }
+            },
+            "Services":[] // add based on id in services collection, if no desired services, create new service and add after creating
+        }
+    ],
+    "DispatchService":[
+        {
+            "Dispatch Service Table":{
+
+            }
+        }
+    ],
+    "Appointments":[
+        {
+            "Appoinment Table":{
+
+            }
+        }
+    ],
+    "Conversation":[
+        {
+            // Chat Id
+        }
+    ],
+    "AudioStorage":[
+        {
+            "Audio Storage Table":""
+        }
+    ],
+    "VideoStorage":[
+        {
+            "Video Storage Table":""
+        }
+    ],
+    "ImageStorage":[
+        {
+            "Image Storage Table":""
+        }
+    ],
+    "Messages":[
+        {
+            // Message Associated with chat Id
+            "Messages Table":{
+
+            }
+        }
+    ],
+    "Promotions":[
+        {
+            "Promotions Table":""
+        }
+    ],
+    "Company":[
+        {
+            "Company Table":""
+        }
+    ],
+    "Services":[// First 6 services shown on main page by default, other added extra services (by workshops) only appear on searches
+        {
+
+        },
+        {
+            
+        },
+        {
+
+        },
+        {
+
+        },
+        {
+
+        },
+        {
+
+        }
+    ]
+}
