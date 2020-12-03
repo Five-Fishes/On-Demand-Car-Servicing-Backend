@@ -1,29 +1,35 @@
 {
-    "Users":[
+    "User":[
         {
-            "Type":"string",
-            "Name":"string",
-            "IP":"string",
-            "Vehicle Table":{
-
+            "Type": "string",
+            "FirstName": "string",
+            "LastName": "string",
+            "Password": "string",
+            "DateOfBirth": "Date",
+            "ContactNo": "string",
+            "Email": "string",
+            "ImageID": "string",
+            "IP": "string",
+            "Vehicle":{
+                "VehicleType": "string",
+                "VehicleBrand": "string",
+                "VehicleModel": "string",
+                "VehiclePlateNumber": "string"
             },
-            "User Table":{
-
-            },
-            "Employee Table":{
-
-            },
-            "Favourite Branch":[
+            "EmployeeType": "Enum",
+            "Favourite Branch": [
                 {
-                    
+                    "FavouriteBranchID": "string"
                 }
             ]
         }
     ],
-    "Branches":[
+    "Branch":[
         {
-            "Company Id":"string",
-            "Branch Table":"Exclude In house service, use hasDispatch only",
+            "Company Id": "string",
+            "BranchAddr": "string",
+            "BranchContactNo": "string",
+            "HasDispatchService": "boolean",
             "Business hours":{
                 "Mon": {
                     "Open":"Time",
@@ -65,74 +71,97 @@
     ],
     "DispatchService":[
         {
-            "Dispatch Service Table":{
-
-            }
+            "DispatchTimeStamp": "Date",
+            "BranchID": "int",
+            "EmployeeID": "int",
+            "CustomerID": "int",
+            "VehicleID": "int",
+            "ServiceID": "int",
+            "CustomerLocationDesc": "string",
+            "ServiceLocation": "dec",
+            "ForemanCurrentLocation": "dec",
+            "ForemanDepartTime": "Date",
+            "EstimatedArrivalTime": "Date"
         }
     ],
     "Appointments":[
         {
-            "Appoinment Table":{
-
-            }
+            "AppointmantDate": "Date",
+            "CustomerID": "int",
+            "BranchID": "int",
+            "VehicleID": "int",
+            "ServiceID": "int",
+            "AppointmentStatus": "Enum"
         }
     ],
     "Conversation":[
         {
-            // Chat Id
+            "ConversationID": "int",
+            "ConversationName": "string"
         }
     ],
     "AudioStorage":[
         {
-            "Audio Storage Table":""
+            "AudioContent": "byteStream",
+            "AudioURL": "string",
+            "AudioType": "string",
+            "AudioLength": "dec"
         }
     ],
     "VideoStorage":[
         {
-            "Video Storage Table":""
+            "VideoSize": "dec",
+            "VideoURL": "string",
+            "VideoFileNm": "string",
+            "VideoType": "string"
         }
     ],
     "ImageStorage":[
         {
-            "Image Storage Table":""
+            "ImageSize": "dec",
+            "ImageURL": "string",
+            "ImageFileNm": "string",
+            "ImageType": "string"
         }
     ],
     "Messages":[
         {
-            // Message Associated with chat Id
-            "Messages Table":{
-
-            }
+            "ChatID": "int", // link back to chat collection
+            "MessageTime": "Date",
+            "MessageType": "Enum", // Image|Audio|Video|Text
+            "MessageText": "string", // Text|URL
+            "ImageID": "int",
+            "AudioID": "int",
+            "VideoID": "int",
+            "SenderID": "int"
         }
     ],
     "Promotions":[
         {
-            "Promotions Table":""
+            "PromotionNm": "string",
+            "PromotionStart": "Date",
+            "PromotionEnd": "Date",
+            "PromotionDesc": "string",
+            "ImageID": "int",
+            "ServiceID": ["int"],
+            "BranchID": ["int"],
+            "PromoCode": "string",
+            "DiscountAm": "dec"
         }
     ],
     "Company":[
         {
-            "Company Table":""
+            "CompanyNm": "string",
+            "CompanyAddr": "string",
+            "OwnerID": "int" // UserID
         }
     ],
     "Services":[// First 6 services shown on main page by default, other added extra services (by workshops) only appear on searches
         {
-
-        },
-        {
-            
-        },
-        {
-
-        },
-        {
-
-        },
-        {
-
-        },
-        {
-
+            "ServiceNm": "string",
+            "IsDispatchAvailable": "boolean",
+            "IsInHouseAvailable": "boolean",
+            "EstimatedServiceTime": "dec"
         }
     ]
 }
