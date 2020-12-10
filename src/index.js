@@ -1,23 +1,30 @@
-import express from 'express';
-import {customers} from './mock_db/mock_customer.js';
-import {ApolloServer, gql} from 'apollo-server-express';
-import dotenv from 'dotenv'
+import express from "express";
+import { ApolloServer, gql } from "apollo-server-express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-dotenv.config()
+import resolvers from "./resolvers";
+import typeDefs from "./typeDefs";
 
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`;
+dotenv.config();
 
 const server = new ApolloServer({
   typeDefs,
+  resolvers,
+  playground: true,
   mocks: true,
 });
 const app = express();
-server.applyMiddleware({app})
+server.applyMiddleware({ app });
 
-app.listen(process.env.PORT, () => {
-  console.log(`🚀 Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`)
-})
+mongoose.set("useFindAndModify", false);
+mongoose
+  .connect(procees.env.CONNECTION_STRING, { userNewUrlParser: true })
+  .then(() => {
+    return app.listen({ port: procees.env.PORT });
+  })
+  .then((res) => {
+    console.log(
+      `🚀 Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`
+    );
+  });
