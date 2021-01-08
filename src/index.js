@@ -16,15 +16,16 @@ const server = new ApolloServer({
 });
 const app = express();
 server.applyMiddleware({ app });
+const port = process.env.PORT || 5000;
 
 mongoose.set("useFindAndModify", false);
 mongoose
   .connect(procees.env.CONNECTION_STRING, { userNewUrlParser: true })
   .then(() => {
-    return app.listen({ port: procees.env.PORT });
+    return app.listen({ port: port });
   })
   .then((res) => {
     console.log(
-      `🚀 Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`
+      `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
     );
   });

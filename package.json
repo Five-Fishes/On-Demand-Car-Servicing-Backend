@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nore -r esm index.js",
     "dev": "npx nodemon -r esm .",
     "debug": "node --nolazy index.js"
   },
