@@ -1,5 +1,5 @@
 import express from "express";
-import { ApolloServer, gql } from "apollo-server-express";
+import { ApolloServer } from "apollo-server-express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
@@ -16,15 +16,16 @@ const server = new ApolloServer({
 });
 const app = express();
 server.applyMiddleware({ app });
+const port = process.env.PORT || 5000;
 
 mongoose.set("useFindAndModify", false);
 mongoose
-  .connect(procees.env.CONNECTION_STRING, { userNewUrlParser: true })
+  .connect(process.env.CONNECTION_STRING, { useUnifiedTopology: true })
   .then(() => {
-    return app.listen({ port: procees.env.PORT });
+    return app.listen({ port: port });
   })
   .then((res) => {
     console.log(
-      `🚀 Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`
+      `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
     );
   });
