@@ -20,7 +20,7 @@ const port = process.env.PORT || 5000;
 
 mongoose.set("useFindAndModify", false);
 mongoose
-  .connect(procees.env.CONNECTION_STRING, { userNewUrlParser: true })
+  .connect(process.env.CONNECTION_STRING, { useUnifiedTopology: true })
   .then(() => {
     return app.listen({ port: port });
   })
