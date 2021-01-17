@@ -1,5 +1,4 @@
 import { gql } from "apollo-server-express";
-import { DateResolver } from "./CustomTypeResolver";
 
 export default gql`
   extend type Query {
@@ -25,13 +24,13 @@ export default gql`
     discountAm: Float!
   }
 
-  type ImageStorage {
-    id: ID!
-    imageSize: Float!
-    imageURL: String!
-    imageFileNm: String!
-    imageType: String!
-  }
+  # type ImageStorage {
+  #   id: ID!
+  #   imageSize: Float!
+  #   imageURL: String!
+  #   imageFileNm: String!
+  #   imageType: String!
+  # }
 
   type Branch {
     id: ID!
@@ -39,22 +38,27 @@ export default gql`
     branchContactNo: String!
   }
 
-  type Service {
-    id: ID!
-    serviceNm: String!
-    isDispatchAvailable: Boolean!
-    isInHouseAvailable: Boolean!
-    estimatedServiceTime: Float!
+  input BranchInput {
+    branchAddr: String!
+    branchContactNo: String!
   }
+
+  # type Service {
+  #   id: ID!
+  #   serviceNm: String!
+  #   isDispatchAvailable: Boolean!
+  #   isInHouseAvailable: Boolean!
+  #   estimatedServiceTime: Float!
+  # }
 
   input PromotionInput {
     id: ID!
     promotionNm: String!
     promotionStart: Date!
     promotionEnd: Date!
-    image: ImageStorage!
-    serivces: [Service!]!
-    branches: [Branch!]!
+    image: ImageStorageInput!
+    serivces: [ServiceInput!]!
+    branches: [BranchInput!]!
     promoCode: String!
     discountAm: Float!
   }

@@ -23,21 +23,21 @@ export default gql`
     sender: User!
   }
 
-  type ImageStorag {
-    id: ID!
-    imageSize: Float!
-    imageURL: String!
-    imageFileNm: String!
-    imageType: String!
-  }
+  # type ImageStorage {
+  #   id: ID!
+  #   imageSize: Float!
+  #   imageURL: String!
+  #   imageFileNm: String!
+  #   imageType: String!
+  # }
 
-  type VideoStorage {
-    id: ID!
-    videoSize: Float!
-    videoURL: String!
-    videoFileNm: String!
-    videoType: String!
-  }
+  # type VideoStorage {
+  #   id: ID!
+  #   videoSize: Float!
+  #   videoURL: String!
+  #   videoFileNm: String!
+  #   videoType: String!
+  # }
 
   type AudioStorage {
     id: ID!
@@ -47,12 +47,12 @@ export default gql`
     audioLength: Float!
   }
 
-  type User {
-    id: ID!
-    type: String!
-    firstName: String!
-    lastName: String!
-  }
+  # type User {
+  #   id: ID!
+  #   type: String!
+  #   firstName: String!
+  #   lastName: String!
+  # }
 
   input MessageInput {
     id: ID!
