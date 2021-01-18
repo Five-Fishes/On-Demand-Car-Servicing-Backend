@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const ImageStorageSchema = new mongoose.Schema({
-  imageSize: mongoose.Decimal128,
+  imageSize: String,
   imageURL: String,
   imageFileNm: String,
   imageType: String,

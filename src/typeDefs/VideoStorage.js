@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server-express';
+import { gql } from "apollo-server-express";
 
 export default gql`
   extend type Query {
@@ -13,7 +13,7 @@ export default gql`
 
   type VideoStorage {
     id: ID!
-    videoSize: Float!
+    videoSize: String!
     videoURL: String!
     videoFileNm: String!
     videoType: String!
@@ -21,9 +21,9 @@ export default gql`
 
   input VideoStorageInput {
     id: ID!
-    videoSize: Float!
+    videoSize: String!
     videoURL: String!
     videoFileNm: String!
     videoType: String!
   }
-`
+`;

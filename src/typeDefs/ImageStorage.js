@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server-express';
+import { gql } from "apollo-server-express";
 
 export default gql`
   extend type Query {
@@ -13,7 +13,7 @@ export default gql`
 
   type ImageStorage {
     id: ID!
-    imageSize: Float!
+    imageSize: String!
     imageURL: String!
     imageFileNm: String!
     imageType: String!
@@ -21,9 +21,9 @@ export default gql`
 
   input ImageStorageInput {
     id: ID!
-    imageSize: Float!
+    imageSize: String!
     imageURL: String!
     imageFileNm: String!
     imageType: String!
   }
-`
+`;
