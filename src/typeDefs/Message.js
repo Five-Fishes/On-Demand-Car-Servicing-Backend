@@ -25,7 +25,7 @@ export default gql`
 
   type ImageStorag {
     id: ID!
-    imageSize: Float!
+    imageSize: String!
     imageURL: String!
     imageFileNm: String!
     imageType: String!
@@ -33,7 +33,7 @@ export default gql`
 
   type VideoStorage {
     id: ID!
-    videoSize: Float!
+    videoSize: String!
     videoURL: String!
     videoFileNm: String!
     videoType: String!
@@ -44,7 +44,7 @@ export default gql`
     audioContent: [Int!]!
     audioURL: String!
     audioType: String!
-    audioLength: Float!
+    audioLength: String!
   }
 
   type User {
@@ -64,4 +64,4 @@ export default gql`
     videoID: Int!
     senderID: Int!
   }
-`
+`;
