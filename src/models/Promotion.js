@@ -10,7 +10,7 @@ const PromotionSchema = new mongoose.Schema(
     serviceID: [Number],
     branchID: [Number],
     promoCode: String,
-    discountAm: String,
+    discountAm: mongoose.Decimal128,
   },
   {
     timestamps: true,
