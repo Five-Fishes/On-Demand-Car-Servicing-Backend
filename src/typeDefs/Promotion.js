@@ -22,12 +22,12 @@ export default gql`
     serivces: [Service!]!
     branches: [Branch!]!
     promoCode: String!
-    discountAm: String!
+    discountAm: Float!
   }
 
   type ImageStorage {
     id: ID!
-    imageSize: String!
+    imageSize: Float!
     imageURL: String!
     imageFileNm: String!
     imageType: String!
@@ -44,7 +44,7 @@ export default gql`
     serviceNm: String!
     isDispatchAvailable: Boolean!
     isInHouseAvailable: Boolean!
-    estimatedServiceTime: String!
+    estimatedServiceTime: Float!
   }
 
   input PromotionInput {
@@ -56,6 +56,6 @@ export default gql`
     serivces: [Service!]!
     branches: [Branch!]!
     promoCode: String!
-    discountAm: String!
+    discountAm: Float!
   }
-`;
+`

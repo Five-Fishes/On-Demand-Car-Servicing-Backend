@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const VideoStorageSchema = new mongoose.Schema({
-  videoSize: String,
+  videoSize: mongoose.Decimal128,
   videoURL: String,
   videoFileNm: String,
   videoType: String,
