@@ -5,7 +5,7 @@ const ServiceSchema = new mongoose.Schema(
     serviceNm: String,
     isDispatchAvailable: Boolean,
     isInHouseAvailable: Boolean,
-    estimatedServiceTime: mongoose.Decimal128,
+    estimatedServiceTime: String,
   },
   {
     timestamps: true,

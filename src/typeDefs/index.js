@@ -6,6 +6,11 @@ import Company from "./Company";
 import AudioStorage from "./AudioStorage";
 import Conversation from "./Conversation";
 import DispatchService from "./DispatchService";
+import Message from "./Message";
+import ImageStorage from "./ImageStorage";
+import VideoStorage from "./VideoStorage";
+import Service from "./Service";
+import Promotion from "./Promotion";
 
 export default [
   root, 
@@ -15,5 +20,11 @@ export default [
   Company,
   AudioStorage,
   Conversation,
-  DispatchService
+  DispatchService,
+  Message, 
+  ImageStorage, 
+  VideoStorage, 
+  Service, 
+  Promotion
 ];
+
