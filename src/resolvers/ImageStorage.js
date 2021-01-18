@@ -1,4 +1,5 @@
 import ImageStorage from "../models/ImageStorage";
+import { ApolloError, UserInputError } from "apollo-server-express"
 
 const convertImageSizeDecimal = (imageStorage) => {
   imageStorage._doc.imageSize = imageStorage._doc.imageSize.toString();
@@ -19,21 +20,23 @@ const ImageStorageResolver = {
         imageStorages.map(data => convertImageSizeDecimal(data));
         return imageStorages;
       } catch (err) {
-        throw new Error(err);
+        throw new ApolloError(err);
       }
     },
     async getImageStorage(_, { id }) {
-      console.log(id)
       try {
         let imageStorage = await ImageStorage.findById(id);
         return convertImageSizeDecimal(imageStorage);
       } catch (err) {
-        throw new Error(err);
+        throw new ApolloError(err);
       }
     }
   },
   Mutation: {
     async createImageStorage(_, { imageStorageInput }) {
+      if (imageStorageInput.id) {
+        throw new ApolloError("New Image Storage cannot have id");
+      }
       const newImageStorage = new ImageStorage({
         ...imageStorageInput
       });
@@ -41,6 +44,9 @@ const ImageStorageResolver = {
       return convertImageSizeDecimal(imageStorage);
     },
     async updateImageStorage(_, { imageStorageInput }) {
+      if (!imageStorageInput.id) {
+        throw new UserInputError("Update Image Storage must have id");
+      }
       try {
         return await ImageStorage.findByIdAndUpdate(imageStorageInput.id, {
           imageSize: imageStorageInput.imageSize,
@@ -52,7 +58,7 @@ const ImageStorageResolver = {
           return convertImageSizeDecimal(res);
         })
       } catch (err) {
-        throw new Error(err);
+        throw new ApolloError(err);
       }
     }
   }
