@@ -13,7 +13,7 @@ export default gql`
 
   type VideoStorage {
     id: ID!
-    videoSize: String!
+    videoSize: Float!
     videoURL: String!
     videoFileNm: String!
     videoType: String!
@@ -21,7 +21,7 @@ export default gql`
 
   input VideoStorageInput {
     id: ID!
-    videoSize: String!
+    videoSize: Float!
     videoURL: String!
     videoFileNm: String!
     videoType: String!

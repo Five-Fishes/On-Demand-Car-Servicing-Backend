@@ -29,7 +29,7 @@ export default gql`
     audioContent: [Int!]!
     audioURL: String!
     audioType: String!
-    audioLength: String!
+    audioLength: Float!
   }
 
   type MessageUser {

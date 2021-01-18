@@ -21,7 +21,7 @@ export default gql`
     serivces: [PromotionService!]!
     branches: [PromotionBranch!]!
     promoCode: String!
-    discountAm: String!
+    discountAm: Float!
   }
 
   type PromotionBranch {
@@ -35,7 +35,7 @@ export default gql`
     serviceNm: String!
     isDispatchAvailable: Boolean!
     isInHouseAvailable: Boolean!
-    estimatedServiceTime: String!
+    estimatedServiceTime: Float!
   }
 
   input PromotionBranchInput {
@@ -49,7 +49,7 @@ export default gql`
     serviceNm: String
     isDispatchAvailable: Boolean
     isInHouseAvailable: Boolean
-    estimatedServiceTime: String
+    estimatedServiceTime: Float
   }
 
   input PromotionInput {
@@ -61,6 +61,6 @@ export default gql`
     serivces: [PromotionServiceInput!]!
     branches: [PromotionBranchInput!]!
     promoCode: String!
-    discountAm: String!
+    discountAm: Float!
   }
 `;
