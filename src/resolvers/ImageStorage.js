@@ -20,9 +20,9 @@ const ImageStorageResolver = {
         throw new Error(err);
       }
     },
-    async getImageStorage(_, {imageStorageId}) {
+    async getImageStorage(_, imageStorageId) {
       try {
-        let imageStorage = await ImageStorage.findById(imageStorageId);
+        let imageStorage = await ImageStorage.findById(imageStorageId.id);
         return convertImageSizeDecimal(imageStorage);
       } catch (err) {
         throw new Error(err);
