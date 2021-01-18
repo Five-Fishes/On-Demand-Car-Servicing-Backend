@@ -20,48 +20,33 @@ export default gql`
     image: ImageStorage
     audio: AudioStorage
     video: VideoStorage
-    sender: User!
+    sender: MessageUser!
   }
 
-  # type ImageStorage {
-  #   id: ID!
-  #   imageSize: Float!
-  #   imageURL: String!
-  #   imageFileNm: String!
-  #   imageType: String!
-  # }
-
-  # type VideoStorage {
-  #   id: ID!
-  #   videoSize: Float!
-  #   videoURL: String!
-  #   videoFileNm: String!
-  #   videoType: String!
-  # }
-
+  # TODO: Remove once the Audio Storage typeDefs done
   type AudioStorage {
     id: ID!
     audioContent: [Int!]!
     audioURL: String!
     audioType: String!
-    audioLength: Float!
+    audioLength: String!
   }
 
-  # type User {
-  #   id: ID!
-  #   type: String!
-  #   firstName: String!
-  #   lastName: String!
-  # }
+  type MessageUser {
+    id: ID!
+    type: String!
+    firstName: String!
+    lastName: String!
+  }
 
   input MessageInput {
     id: ID!
-    chatId: Int!
+    chatId: String!
     messageType: String!
     messageText: String!
-    imageID: Int!
-    audioID: Int!
-    videoID: Int!
-    senderID: Int!
+    imageID: String!
+    audioID: String!
+    videoID: String!
+    senderID: String!
   }
 `

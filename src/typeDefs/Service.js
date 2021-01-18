@@ -17,7 +17,7 @@ export default gql`
     serviceNm: String!
     isDispatchAvailable: Boolean!
     isInHouseAvailable: Boolean!
-    estimatedServiceTime: Float!
+    estimatedServiceTime: String!
   }
 
   input ServiceInput {
@@ -25,6 +25,6 @@ export default gql`
     serviceNm: String!
     isDispatchAvailable: Boolean!
     isInHouseAvailable: Boolean!
-    estimatedServiceTime: Float!
+    estimatedServiceTime: String!
   }
-`
+`;

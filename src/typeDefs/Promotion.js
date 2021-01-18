@@ -18,38 +18,39 @@ export default gql`
     promotionStart: Date!
     promotionEnd: Date!
     image: ImageStorage!
-    serivces: [Service!]!
-    branches: [Branch!]!
+    serivces: [PromotionService!]!
+    branches: [PromotionBranch!]!
     promoCode: String!
-    discountAm: Float!
+    discountAm: String!
   }
 
-  # type ImageStorage {
-  #   id: ID!
-  #   imageSize: Float!
-  #   imageURL: String!
-  #   imageFileNm: String!
-  #   imageType: String!
-  # }
-
-  type Branch {
+  type PromotionBranch {
     id: ID!
     branchAddr: String!
     branchContactNo: String!
   }
 
-  input BranchInput {
-    branchAddr: String!
-    branchContactNo: String!
+  type PromotionService {
+    id: ID!
+    serviceNm: String!
+    isDispatchAvailable: Boolean!
+    isInHouseAvailable: Boolean!
+    estimatedServiceTime: String!
   }
 
-  # type Service {
-  #   id: ID!
-  #   serviceNm: String!
-  #   isDispatchAvailable: Boolean!
-  #   isInHouseAvailable: Boolean!
-  #   estimatedServiceTime: Float!
-  # }
+  input PromotionBranchInput {
+    id: ID!
+    branchAddr: String
+    branchContactNo: String
+  }
+
+  input PromotionServiceInput {
+    id: ID!
+    serviceNm: String
+    isDispatchAvailable: Boolean
+    isInHouseAvailable: Boolean
+    estimatedServiceTime: String
+  }
 
   input PromotionInput {
     id: ID!
@@ -57,9 +58,9 @@ export default gql`
     promotionStart: Date!
     promotionEnd: Date!
     image: ImageStorageInput!
-    serivces: [ServiceInput!]!
-    branches: [BranchInput!]!
+    serivces: [PromotionServiceInput!]!
+    branches: [PromotionBranchInput!]!
     promoCode: String!
-    discountAm: Float!
+    discountAm: String!
   }
-`
+`;

@@ -1,5 +1,10 @@
 import ImageStorage from "../models/ImageStorage";
 
+const convertImageSizeDecimal = (imageStorage) => {
+  imageStorage._doc.imageSize = imageStorage._doc.imageSize.toString();
+  return imageStorage;
+}
+
 const ImageStorageResolver = {
   Query: {
     async getImageStorages(_) {
@@ -23,7 +28,8 @@ const ImageStorageResolver = {
       const newImageStorage = new ImageStorage({
         ...body.imageStorageInput
       });
-      return await newImageStorage.save();
+      let imageStorage = await newImageStorage.save();
+      return convertImageSizeDecimal(imageStorage)
     },
     async updateImageStorage(_, { body }) {
       try {
