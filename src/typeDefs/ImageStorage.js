@@ -1,9 +1,9 @@
-import { gql } from 'apollo-server-express';
+import { gql } from "apollo-server-express";
 
 export default gql`
   extend type Query {
-    imageStorages(filter: String!): [ImageStorage!]!
-    imageStorage(id: String!): ImageStorage!
+    getImageStorages(filter: String): [ImageStorage!]!
+    getImageStorage(id: String!): ImageStorage!
   }
 
   extend type Mutation {
@@ -20,10 +20,10 @@ export default gql`
   }
 
   input ImageStorageInput {
-    id: ID!
+    id: ID
     imageSize: Float!
     imageURL: String!
     imageFileNm: String!
     imageType: String!
   }
-`
+`;

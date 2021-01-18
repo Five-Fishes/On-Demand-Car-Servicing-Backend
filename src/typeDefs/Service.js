@@ -27,4 +27,4 @@ export default gql`
     isInHouseAvailable: Boolean!
     estimatedServiceTime: Float!
   }
-`
+`;

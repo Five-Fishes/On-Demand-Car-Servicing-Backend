@@ -4,7 +4,7 @@ const CompanySchema = new mongoose.Schema(
   {
     companyNm: String,
     companyAddr: String,
-    ownerID: mongoose.Decimal128, // UserID
+    ownerID: String, // UserID
   },
   {
     timestamps: true,
