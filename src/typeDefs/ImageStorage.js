@@ -20,7 +20,7 @@ export default gql`
   }
 
   input ImageStorageInput {
-    id: ID!
+    id: ID
     imageSize: Float!
     imageURL: String!
     imageFileNm: String!

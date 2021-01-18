@@ -2,7 +2,7 @@ import ImageStorage from "../models/ImageStorage";
 
 const ImageStorageResolver = {
   Query: {
-    async getImageStorages() {
+    async getImageStorages(_) {
       try {
         return await ImageStorage.find();
       } catch (err) {
@@ -18,9 +18,10 @@ const ImageStorageResolver = {
     }
   },
   Mutation: {
-    async createImageStorage(_, { body }) {
+    async createImageStorage(_, body) {
+      console.log("Original Structure: ", body.imageStorageInput)
       const newImageStorage = new ImageStorage({
-        body
+        ...body.imageStorageInput
       });
       return await newImageStorage.save();
     },
