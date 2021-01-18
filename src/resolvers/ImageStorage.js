@@ -7,9 +7,13 @@ const convertImageSizeDecimal = (imageStorage) => {
 
 const ImageStorageResolver = {
   Query: {
-    async getImageStorages(_) {
+    async getImageStorages(_, body) {
+      let filterJson = {};
+      if (body.hasOwnProperty("filter") && body.filter) {
+        filterJson = JSON.parse(body.filter);
+      }
       try {
-        let imageStorages = await ImageStorage.find();
+        let imageStorages = await ImageStorage.find(filterJson);
         imageStorages.map(data => convertImageSizeDecimal(data));
         return imageStorages;
       } catch (err) {
