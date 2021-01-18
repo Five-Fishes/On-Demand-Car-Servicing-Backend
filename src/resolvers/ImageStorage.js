@@ -9,14 +9,17 @@ const ImageStorageResolver = {
   Query: {
     async getImageStorages(_) {
       try {
-        return await ImageStorage.find();
+        let imageStorages = await ImageStorage.find();
+        imageStorages.map(data => convertImageSizeDecimal(data));
+        return imageStorages;
       } catch (err) {
         throw new Error(err);
       }
     },
     async getImageStorage(_, {imageStorageId}) {
       try {
-        return await ImageStorage.findById(imageStorageId);
+        let imageStorage = await ImageStorage.findById(imageStorageId);
+        return convertImageSizeDecimal(imageStorage);
       } catch (err) {
         throw new Error(err);
       }
@@ -24,23 +27,23 @@ const ImageStorageResolver = {
   },
   Mutation: {
     async createImageStorage(_, body) {
-      console.log("Original Structure: ", body.imageStorageInput)
       const newImageStorage = new ImageStorage({
         ...body.imageStorageInput
       });
       let imageStorage = await newImageStorage.save();
-      return convertImageSizeDecimal(imageStorage)
+      return convertImageSizeDecimal(imageStorage);
     },
-    async updateImageStorage(_, { body }) {
+    async updateImageStorage(_, body) {
+      const imageStorageInput = {...body.imageStorageInput};
       try {
-        ImageStorage.findByIdAndUpdate(body.id, {
-          imageSize: body.imageSize,
-          imageURL: body.imageURL,
-          imageFileNm: body.imageFileNm,
-          imageType: body.imageType
-        })
-        .then(res => {
-          return res._doc;
+        return await ImageStorage.findByIdAndUpdate(imageStorageInput.id, {
+          imageSize: imageStorageInput.imageSize,
+          imageURL: imageStorageInput.imageURL,
+          imageFileNm: imageStorageInput.imageFileNm,
+          imageType: imageStorageInput.imageType
+        }, {new: true})
+        .then(res => {          
+          return convertImageSizeDecimal(res);
         })
       } catch (err) {
         throw new Error(err);
