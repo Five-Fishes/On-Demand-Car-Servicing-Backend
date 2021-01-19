@@ -23,15 +23,6 @@ export default gql`
     sender: MessageUser!
   }
 
-  # TODO: Remove once the Audio Storage typeDefs done
-  type AudioStorage {
-    id: ID!
-    audioContent: [Int!]!
-    audioURL: String!
-    audioType: String!
-    audioLength: Float!
-  }
-
   type MessageUser {
     id: ID!
     type: String!
