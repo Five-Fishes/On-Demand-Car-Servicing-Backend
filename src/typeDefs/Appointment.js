@@ -6,8 +6,6 @@ export default gql`
     appointment(id: ID!): Appointment!
   }
 
-  scalar Date
-
   extend type Mutation {
     createAppointment(appointmentInput: AppointmentInput!): Appointment!
     updateAppointment(appointmentInput: AppointmentInput!): Appointment!

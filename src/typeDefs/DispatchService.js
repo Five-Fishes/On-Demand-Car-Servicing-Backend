@@ -20,10 +20,10 @@ export default gql`
     customerID: ID!
     serviceID: ID!
     customerLocationDesc: String!
-    serviceLocation: Float
-    foremanCurrentLocation: Float
-    foremanDepartTime: Date
-    estimatedArrivalTime: Date
+    serviceLocation: Float!
+    foremanCurrentLocation: Float!
+    foremanDepartTime: Date!
+    estimatedArrivalTime: Date!
   }
 
   type DispatchService {
@@ -33,10 +33,10 @@ export default gql`
     customerID: ID!
     serviceID: ID!
     customerLocationDesc: String!
-    serviceLocation: Float
-    foremanCurrentLocation: Float
-    foremanDepartTime: Date
-    estimatedArrivalTime: Date
+    serviceLocation: Float!
+    foremanCurrentLocation: Float!
+    foremanDepartTime: Date!
+    estimatedArrivalTime: Date!
   }
 
 `;

@@ -2,7 +2,7 @@ import { gql } from "apollo-server-express";
 
 export default gql`
   extend type Query {
-    branchs(filter: String!): [Branch!]!
+    branches(filter: String!): [Branch!]!
     branch(id: ID!): Branch!
   }
 
@@ -18,63 +18,27 @@ export default gql`
     branchAddr: String!
     branchContactNo: String!
     hasDispatchService: Boolean
-    businesshours: businesshoursInput!
-    services: [servicesInput!]
+    businesshours: BusinesshoursInput!
+    services: [ServicesInput!]
   }
 
-  input businesshoursInput {
-    mon: monInput!
-    tue: tueInput!
-    wed: wedInput!
-    thu: thuInput!
-    fri: friInput!
-    sat: satInput!
-    sun: sunInput!
+  input BusinesshoursInput {
+    mon: DayInput!
+    tue: DayInput!
+    wed: DayInput!
+    thu: DayInput!
+    fri: DayInput!
+    sat: DayInput!
+    sun: DayInput!
   }
 
-  input monInput {
+  input DayInput{
     open: String!
     break: String!
     close: String!
   }
 
-  input tueInput {
-    open: String!
-    break: String!
-    close: String!
-  }
-
-  input wedInput {
-    open: String!
-    break: String!
-    close: String!
-  }
-
-  input thuInput {
-    open: String!
-    break: String!
-    close: String!
-  }
-
-  input friInput {
-    open: String!
-    break: String!
-    close: String!
-  }
-
-  input satInput {
-    open: String!
-    break: String!
-    close: String!
-  }
-
-  input sunInput {
-    open: String!
-    break: String!
-    close: String!
-  }
-
-  input servicesInput {
+  input ServicesInput {
     serviceNm: String!
     isDispatchAvailable: Boolean
     isInHouseAvailable: Boolean
@@ -86,68 +50,32 @@ export default gql`
     companyId: String!
     branchAddr: String!
     branchContactNo: String!
-    hasDispatchService: Boolean
-    businesshours: businesshours!
-    services: [services!]
+    hasDispatchService: Boolean!
+    businesshours: Businesshours!
+    services: [Services!]
   }
 
-  type businesshours {
-    mon: mon!
-    tue: tue!
-    wed: wed!
-    thu: thu!
-    fri: fri!
-    sat: sat!
-    sun: sun!
+  type Businesshours {
+    mon: Day!
+    tue: Day!
+    wed: Day!
+    thu: Day!
+    fri: Day!
+    sat: Day!
+    sun: Day!
   }
 
-  type mon {
-    open: String
-    break: String
-    close: String
+  type Day {
+    open: String!
+    break: String!
+    close: String!
   }
 
-  type tue {
-    open: String
-    break: String
-    close: String
-  }
-
-  type wed {
-    open: String
-    break: String
-    close: String
-  }
-
-  type thu {
-    open: String
-    break: String
-    close: String
-  }
-
-  type fri {
-    open: String
-    break: String
-    close: String
-  }
-
-  type sat {
-    open: String
-    break: String
-    close: String
-  }
-
-  type sun {
-    open: String
-    break: String
-    close: String
-  }
-
-  type services {
+  type Services {
     serviceNm: String!
-    isDispatchAvailable: Boolean
-    isInHouseAvailable: Boolean
-    estimatedServiceTime: Float
+    isDispatchAvailable: Boolean!
+    isInHouseAvailable: Boolean!
+    estimatedServiceTime: Float!
   }
 
 `;

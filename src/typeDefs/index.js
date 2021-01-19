@@ -1,6 +1,6 @@
 import root from "./root";
 import User from "./User";
-import Application from "./Appointment";
+import Appointment from "./Appointment";
 import Branch from "./Branch";
 import Company from "./Company";
 import AudioStorage from "./AudioStorage";
@@ -15,7 +15,7 @@ import Promotion from "./Promotion";
 export default [
   root, 
   User, 
-  Application,
+  Appointment,
   Branch,
   Company,
   AudioStorage,

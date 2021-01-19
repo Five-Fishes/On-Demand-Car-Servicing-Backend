@@ -15,14 +15,14 @@ export default gql`
     id: ID!
     companyNm: String!
     companyAddr: String!
-    ownerID: Float
+    ownerID: Float!
   }
 
   type Company {
     id: ID!
     companyNm: String!
     companyAddr: String!
-    ownerID: Float
+    ownerID: Float!
   }
 
 `;
