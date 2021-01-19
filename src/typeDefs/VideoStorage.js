@@ -20,7 +20,7 @@ export default gql`
   }
 
   input VideoStorageInput {
-    id: ID!
+    id: ID
     videoSize: Float!
     videoURL: String!
     videoFileNm: String!
