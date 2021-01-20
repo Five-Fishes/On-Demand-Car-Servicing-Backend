@@ -37,7 +37,6 @@ export default gql`
   }
 
   input DispatchServiceVehicleInput {
-    id: ID!
     vehicleType: String!
     vehicleBrand: String!
     vehicleModel: String!
