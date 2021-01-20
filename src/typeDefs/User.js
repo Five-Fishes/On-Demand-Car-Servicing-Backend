@@ -54,6 +54,7 @@ export default gql`
     vehicle: Vehicle!
     employeeType: String!
     favouriteBranch: [FavouriteBranch!]!
+    employementBranch: String
   }
 
   type Vehicle {
