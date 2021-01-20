@@ -30,9 +30,9 @@ export default gql`
     vehicle: DispatchServiceVehicleInput!
     customerLocationDesc: String!
     serviceLocation: String!
-    foremanCurrentLocation: String!
-    foremanDepartTime: String!
-    estimatedArrivalTime: String!
+    foremanCurrentLocation: String
+    foremanDepartTime: String
+    estimatedArrivalTime: String
     status: DispatchServiceStatus!
   }
 
@@ -45,17 +45,18 @@ export default gql`
   }
 
   type DispatchService {
+    id: ID!
     dispatchTimeStamp: String
-    branch: DispacthServiceBranch!
+    branch: DispacthServiceBranch
     employee: DispatchServiceEmployee
-    customer: DispatchServiceCustomer!
-    service: DispatchServiceDetails!
+    customer: DispatchServiceCustomer
+    service: DispatchServiceDetails
     vehicle: DispatchServiceVehicle!
     customerLocationDesc: String!
     serviceLocation: String!
-    foremanCurrentLocation: String!
-    foremanDepartTime: String!
-    estimatedArrivalTime: String!
+    foremanCurrentLocation: String
+    foremanDepartTime: String
+    estimatedArrivalTime: String
     status: DispatchServiceStatus!
   }
 
@@ -70,7 +71,7 @@ export default gql`
     contactNo: String!
     ip: String!
     employeeType: String!
-    employementBranch: String!
+    employmentBranch: ID!
   }
 
   type DispatchServiceCustomer {

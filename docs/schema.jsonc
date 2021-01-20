@@ -19,7 +19,7 @@
                 }
             ],
             "EmployeeType": "Enum",
-            "EmploymentBranch": "string",
+            "Employment Branch": "string",
             "Favourite Branch": [
                 {
                     "FavouriteBranchID": "string"

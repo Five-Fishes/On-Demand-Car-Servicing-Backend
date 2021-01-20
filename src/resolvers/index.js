@@ -1,3 +1,4 @@
 import ImageStorageResolver from "./ImageStorage";
+import DispatchServiceResolver from "./DispatchService";
 
-export default [ImageStorageResolver];
+export default [ImageStorageResolver, DispatchServiceResolver];
