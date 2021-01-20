@@ -96,8 +96,12 @@
     ],
     "Conversation":[
         {
-            "ConversationID": "int",
-            "ConversationName": "string"
+            "ConversationName": "string",
+            "Members": [
+                {
+                    "User": "string"
+                }
+            ]
         }
     ],
     "AudioStorage":[

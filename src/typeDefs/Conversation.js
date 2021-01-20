@@ -9,17 +9,25 @@ export default gql`
   extend type Mutation {
     createConversation(conversationInput: ConversationInput!): Conversation!
     updateConversation(conversationInput: ConversationInput!): Conversation!
-    deleteConversation(conversationId: String!): Conversation!
+    deleteConversation(id: String!): String!
   }
 
   input ConversationInput {
-    conversationID: ID!
     conversationName: String!
+    members: [ID!]
   }
 
   type Conversation {
-    conversationID: ID!
     conversationName: String!
+    members: [ConversationMember!]!
+  }
+
+  type ConversationMember {
+    type: String!
+    employeeType: String!
+    firstName: String!
+    lastName: String!
+    contactNo: String!
   }
 
 `;
