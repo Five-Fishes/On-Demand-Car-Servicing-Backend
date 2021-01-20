@@ -1,18 +1,35 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const DispatchServiceSchema = new mongoose.Schema(
   {
     dispatchTimeStamp: Date,
-    branchID: Number,
-    employeeID: Number,
-    customerID: Number,
-    vehicleID: Number,
-    serviceID: Number,
     customerLocationDesc: String,
-    serviceLocation: mongoose.Decimal128,
-    foremanCurrentLocation: mongoose.Decimal128,
+    serviceLocation: String,
+    foremanCurrentLocation: String,
     foremanDepartTime: Date,
     estimatedArrivalTime: Date,
+    vehicle: {
+      vehicleType: String,
+      vehicleBrand: String,
+      vehicleModel: String,
+      vehiclePlateNumber: String
+    },
+    branch: {
+      type: Schema.Types.ObjectId,
+      ref: "Branch"
+    },
+    employee: {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    },
+    customer: {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    },
+    service: {
+      type: Schema.Types.ObjectId,
+      ref: "Service"
+    },
   },
   {
     timestamps: true,
