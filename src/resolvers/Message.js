@@ -2,6 +2,13 @@ import Message from "../models/Message";
 import User from "../models/User";
 import { ApolloError, UserInputError } from "apollo-server-express";
 
+const MessageType = {
+  "TEXT": "TEXT",
+  "AUDIO": "AUDIO",
+  "IMAGE": "IMAGE",
+  "VIDEO": "VIDEO"
+}
+
 const MessageResolver = {
   Query: {
     async getMessages(_, { filter }) {
@@ -69,13 +76,13 @@ const MessageResolver = {
 }
 
 const convertMessageDecimalContent = (message) => {
-  if (message._doc.messageType === "AUDIO") {
+  if (message._doc.messageType === MessageType.AUDIO) {
     message._doc.audio.audioLength = message._doc.audio.audioLength.toString();
   }
-  if (message._doc.messageType === "IMAGE") {
+  if (message._doc.messageType === MessageType.IMAGE) {
     message._doc.image.imageSize = message._doc.image.imageSize.toString();
   }
-  if (message._doc.messageType === "VIDEO") {
+  if (message._doc.messageType === MessageType.VIDEO) {
     message._doc.video.videoSize = message._doc.video.videoSize.toString();
   }
   return message;
