@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node -r esm index.js",
-    "dev": "npx nodemon -r esm .",
+    "dev": "npx nodemon -r esm index.js",
     "debug": "node --nolazy index.js"
   },
   "repository": {
@@ -22,9 +22,12 @@
   "homepage": "https://github.com/Five-Fishes/On-Demand-Car-Servicing-Backend#readme",
   "dependencies": {
     "apollo-server-express": "^2.19.0",
+    "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
+    "email-validator": "^2.0.4",
     "esm": "^3.2.25",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.6",
     "nodemon": "^2.0.6"
   }
