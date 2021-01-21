@@ -25,9 +25,10 @@ export default gql`
     contactNo: String!
     email: String!
     ip: String!
-    vehicle: VehicleInput!
-    employeeType: String!
-    favouriteBranch: [FavouriteBranchInput!]!
+    vehicle: VehicleInput
+    employeeType: String
+    employmentBranch: String
+    favouriteBranch: [FavouriteBranchInput!]
   }
 
   input VehicleInput {
@@ -53,6 +54,7 @@ export default gql`
     ip: String!
     vehicle: Vehicle!
     employeeType: String!
+    employmentBranch: String
     favouriteBranch: [FavouriteBranch!]!
   }
 
