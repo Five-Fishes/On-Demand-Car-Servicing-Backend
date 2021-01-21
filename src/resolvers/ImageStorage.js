@@ -9,12 +9,10 @@ const convertImageSizeDecimal = (imageStorage) => {
 const ImageStorageResolver = {
   Query: {
     async getImageStorages(_, { filter }) {
-      console.log(filter)
       let filterJson = {};
       if (filter) {
         filterJson = JSON.parse(filter);
       }
-      console.log(filterJson)
       try {
         let imageStorages = await ImageStorage.find(filterJson);
         imageStorages.map(data => convertImageSizeDecimal(data));
