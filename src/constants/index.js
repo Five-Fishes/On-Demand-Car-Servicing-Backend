@@ -1,1 +1,1 @@
-export { default as EMPLOYEE_TYPE } from "./EmployeeType";
+export { EMPLOYEE_TYPE, USER_TYPE } from "./User";

@@ -1,5 +1,6 @@
 # Node Libraries
 /node_modules
+package-lock.json
 
 # IDE Config Files/Folder
 .vscode

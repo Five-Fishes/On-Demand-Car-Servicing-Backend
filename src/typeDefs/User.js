@@ -10,24 +10,31 @@ export default gql`
   }
 
   extend type Mutation {
-    createUser(userInput: UserInput!): User!
+    login(email: String!, password: String!): User!
+
+    """
+    Do not provide ID while creating user
+    """
+    signUp(userInput: UserInput!): User!
     updateUser(userInput: UserInput!): User!
-    deleteUser(useId: String!): User!
+    deleteUser(userId: String!): User!
   }
 
+  """
+  No need to provide ip during creation, but should have IP while updating
+  """
   input UserInput {
-    id: ID!
-    type: String!
+    id: ID
+    type: UserType!
     firstName: String!
     lastName: String!
     password: String!
     dateOfBirth: String!
     contactNo: String!
     email: String!
-    ip: String!
-    vehicle: VehicleInput
+    ip: String
+    vehicle: [VehicleInput!]
     employeeType: String
-    employmentBranch: String
     favouriteBranch: [FavouriteBranchInput!]
   }
 
@@ -44,18 +51,18 @@ export default gql`
 
   type User {
     id: ID!
-    type: String!
+    type: UserType!
     firstName: String!
     lastName: String!
     password: String!
     dateOfBirth: String!
     contactNo: String!
     email: String!
-    ip: String!
-    vehicle: Vehicle!
-    employeeType: String!
-    employmentBranch: String
-    favouriteBranch: [FavouriteBranch!]!
+    ip: String
+    vehicle: [Vehicle!]
+    employeeType: String
+    favouriteBranch: [FavouriteBranch!]
+    token: String
   }
 
   type Vehicle {
@@ -67,5 +74,17 @@ export default gql`
 
   type FavouriteBranch {
     favouriteBranchID: String!
+  }
+
+  enum UserType {
+    EMPLOYEE
+    CUSTOMER
+    BRANDOWNER
+  }
+
+  enum EmployeeType {
+    MANAGER
+    STAFF
+    NONE
   }
 `;

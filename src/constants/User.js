@@ -1,0 +1,10 @@
+export const EMPLOYEE_TYPE = {
+  STAFF: "STAFF",
+  MANAGER: "MANAGER",
+  NONE: "NONE",
+};
+export const USER_TYPE = {
+  EMPLOYEE: "EMPLOYEE",
+  CUSTOMER: "CUSTOMER",
+  BRANDOWNER: "BRANDOWNER",
+};

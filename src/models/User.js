@@ -16,12 +16,12 @@ const UserSchema = new mongoose.Schema(
         vehicleBrand: String,
         vehicleModel: String,
         vehiclePlateNumber: String,
-      }
+      },
     ],
     employeeType: String,
     employmentBranch: {
       type: Schema.Types.ObjectId,
-      ref: "Branch"
+      ref: "Branch",
     },
     favouriteBranch: [
       {
