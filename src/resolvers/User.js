@@ -68,6 +68,8 @@ const UserResolver = {
 
         const user = await User.findById(id);
         return user;
+      } else {
+        throw new UserInputError("No ID provided");
       }
     },
   },
