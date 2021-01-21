@@ -13,7 +13,7 @@ import Service from "./Service";
 import Promotion from "./Promotion";
 
 export default [
-  root, 
+  root,
   User, 
   Appointment,
   Branch,

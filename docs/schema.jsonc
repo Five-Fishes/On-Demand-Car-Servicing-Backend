@@ -10,13 +10,16 @@
             "Email": "string",
             "ImageID": "string",
             "IP": "string",
-            "Vehicle":{
-                "VehicleType": "string",
-                "VehicleBrand": "string",
-                "VehicleModel": "string",
-                "VehiclePlateNumber": "string"
-            },
+            "Vehicle":[
+                {
+                    "VehicleType": "string",
+                    "VehicleBrand": "string",
+                    "VehicleModel": "string",
+                    "VehiclePlateNumber": "string"
+                }
+            ],
             "EmployeeType": "Enum",
+            "Employment Branch": "string",
             "Favourite Branch": [
                 {
                     "FavouriteBranchID": "string"
@@ -72,16 +75,22 @@
     "DispatchService":[
         {
             "DispatchTimeStamp": "Date",
-            "BranchID": "int",
-            "EmployeeID": "int",
-            "CustomerID": "int",
-            "VehicleID": "int",
-            "ServiceID": "int",
+            "Branch": "string",
+            "Employee": "string",
+            "Customer": "string",
+            "Vehicle": {
+                "Vehicle Type": "string",
+                "Vehicle Brand": "string",
+                "Vehicle Model": "string",
+                "Vehicle Plate Number": "string"
+            },
+            "Service": "string",
             "CustomerLocationDesc": "string",
-            "ServiceLocation": "dec",
-            "ForemanCurrentLocation": "dec",
+            "ServiceLocation": "string",
+            "ForemanCurrentLocation": "string",
             "ForemanDepartTime": "Date",
-            "EstimatedArrivalTime": "Date"
+            "EstimatedArrivalTime": "Date",
+            "Status": "string"
         }
     ],
     "Appointments":[
@@ -156,7 +165,8 @@
             "OwnerID": "int" // UserID
         }
     ],
-    "Services":[// First 6 services shown on main page by default, other added extra services (by workshops) only appear on searches
+    // First 6 services shown on main page by default, other added extra services (by workshops) only appear on searches
+    "Services":[
         {
             "ServiceNm": "string",
             "IsDispatchAvailable": "boolean",
