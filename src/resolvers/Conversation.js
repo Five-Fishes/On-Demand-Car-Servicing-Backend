@@ -1,16 +1,29 @@
 import Conversation from "../models/Conversation";
 import { ApolloError, UserInputError } from "apollo-server-express"
+import User from "../models/User";
+// import User from "../models/User";
+
+const filterByUserId = (conversations, users) => {
+  if (!users || users.length === 0) {
+    return conversations;
+  }
+  return conversations.filter(data => {
+    const member = data.members.filter(user => users.includes(user._id.toString()));
+    return member.length > 0;
+  })
+}
 
 const ConversationResolver = {
   Query: {
-    async getConversations(_, { filter }) {
+    async getConversations(_, { filter, users }) {
       let filterJson = {};
       if (filter) {
         filterJson = JSON.parse(filter);
       }
       try {
-        let conversations = await Conversation.find(filterJson);
-        conversations.map(data => data.populate("members"));
+        let conversations = await Conversation.find(filterJson)
+          .populate("members");
+        conversations = filterByUserId(conversations, users);
         return conversations;
       } catch (err) {
         throw new ApolloError(err.message);
@@ -29,6 +42,7 @@ const ConversationResolver = {
   },
   Mutation: {
     async createConversation(_, { conversationInput }) {
+      console.log(conversationInput)
       if (conversationInput.id) {
         throw new ApolloError("New Conversation cannot have id");
       }
@@ -44,7 +58,7 @@ const ConversationResolver = {
       if (!conversationInput.id) {
         throw new UserInputError("Update Conversation must have id");
       }
-      let originalConversation = Conversation.findById(conversationInput.id);
+      let originalConversation = await Conversation.findById(conversationInput.id);
       if (!originalConversation) {
         throw new ApolloError("Conversation is not exist");
       }
@@ -52,7 +66,6 @@ const ConversationResolver = {
       try {
         let conversation = await Conversation.findByIdAndUpdate(conversationInput.id, {
           ...conversationInput,
-          members: originalConversation._doc.members.push(...conversationInput.members)
         }, {new: true})
         .then(res => {
           return res;
