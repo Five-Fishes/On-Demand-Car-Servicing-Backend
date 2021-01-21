@@ -1,20 +1,36 @@
 import express from "express";
+import expressJwt from "express-jwt";
 import { ApolloServer } from "apollo-server-express";
+import { applyMiddleware } from "graphql-middleware";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import { makeExecutableSchema } from "apollo-server";
 
 import resolvers from "./resolvers";
 import typeDefs from "./typeDefs";
+import { permissions } from "./utils/validator";
 
 dotenv.config();
 
+const schema = makeExecutableSchema({ typeDefs, resolvers });
+const scheaWithMiddleware = applyMiddleware(schema, permissions);
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema: scheaWithMiddleware,
+  context: ({ req }) => {
+    const user = req.user || null;
+    return { user };
+  },
   playground: true,
   mocks: !!+process.env.MOCK,
 });
 const app = express();
+app.use(
+  expressJwt({
+    secret: process.env.SECRET_KEY,
+    algorithms: ["HS256"],
+    credentialsRequired: false,
+  })
+);
 server.applyMiddleware({ app });
 const port = process.env.PORT || 5000;
 
