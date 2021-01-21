@@ -58,14 +58,6 @@ export default gql`
     lastName: String!
   }
 
-  input AudioStorageInput {
-    id: ID
-    audioContent: [Int!]!
-    audioURL: String!
-    audioType: String!
-    audioLength: Float!
-  }
-
   input MessageInput {
     id: ID
     chatID: ID!
@@ -75,4 +67,4 @@ export default gql`
     audio: AudioStorageInput
     video: VideoStorageInput
   }
-`
+`;
