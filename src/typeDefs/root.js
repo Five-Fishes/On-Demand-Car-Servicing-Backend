@@ -1,10 +1,11 @@
 import { gql } from "apollo-server-express";
-import { GraphQLScalarType } from 'graphql';
-import { Kind } from 'graphql/language';
+import { GraphQLScalarType } from "graphql";
+import { Kind } from "graphql/language";
 
 export default gql`
   scalar Date
-  
+  scalar Upload
+
   type Query {
     _: String
   }
@@ -20,8 +21,8 @@ export default gql`
 
 const DateResolver = {
   Date: new GraphQLScalarType({
-    name: 'Date',
-    description: 'Date custom scalar type',
+    name: "Date",
+    description: "Date custom scalar type",
     parseValue(value) {
       return new Date(value); // value from the client
     },
@@ -34,5 +35,5 @@ const DateResolver = {
       }
       return null;
     },
-  })
-}
+  }),
+};

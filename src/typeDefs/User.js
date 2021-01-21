@@ -62,7 +62,7 @@ export default gql`
     vehicle: [Vehicle!]!
     employeeType: String
     favouriteBranch: [FavouriteBranch!]
-    token: String!
+    token: String
   }
 
   type Vehicle {
