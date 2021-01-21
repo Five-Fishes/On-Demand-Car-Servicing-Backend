@@ -9,7 +9,7 @@ export default gql`
   extend type Mutation {
     createAppointment(appointmentInput: AppointmentInput!): Appointment!
     updateAppointment(appointmentInput: AppointmentInput!): Appointment!
-    deleteAppointment(appointmentId: String!): Appointment!
+    deleteAppointment(id: String!): String!
   }
 
   input AppointmentInput {

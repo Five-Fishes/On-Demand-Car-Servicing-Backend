@@ -2,8 +2,6 @@ import { gql } from "apollo-server-express";
 
 export default gql`
 
-  scalar byteArray
-
   extend type Query {
     audioStorages(filter: String!): [AudioStorage!]!
     audioStorage(id: ID!): AudioStorage!
@@ -13,26 +11,30 @@ export default gql`
   extend type Mutation {
     createAudioStorage(audioStorageInput: AudioStorageInput!): AudioStorage!
     updateAudioStorage(audioStorageInput: AudioStorageInput!): AudioStorage!
-    deleteAudioStorage(audioStorageId: String!): AudioStorage!
+    deleteAudioStorage(id: String!): String!
     uploadAudioStorage(audioStorage: Upload!): AudioStorage!
   }
 
   input AudioStorageInput {
     id: ID!
-    audioContent: byteArray
+    """ audio Content should be Buffer """
+    audioContent: String! 
     audioURL: String!
     audioType: String!
     audioLength: Float
+    """ upload File properties """
     mimetype: String!
     encoding: String!
   }
 
   type AudioStorage {
     id: ID!
-    audioContent: byteArray
+    """ should be Buffer """
+    audioContent: String 
     audioURL: String!
     audioType: String!
     audioLength: Float
+    """ upload File properties """
     mimetype: String!
     encoding: String!
   }
