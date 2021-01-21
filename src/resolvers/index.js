@@ -1,3 +1,4 @@
 import ImageStorageResolver from "./ImageStorage";
+import MessageResolver from "./Message";
 
-export default [ImageStorageResolver];
+export default [ImageStorageResolver, MessageResolver];
