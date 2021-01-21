@@ -3,7 +3,7 @@ import {
   AuthenticationError,
   UserInputError,
 } from "apollo-server-express";
-import validator from "email-validator";
+import emailFormatValidator from "email-validator";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
@@ -86,7 +86,7 @@ const UserResolver = {
       /**
        * validate email format
        */
-      const isEmailValid = validator.validate(email);
+      const isEmailValid = emailFormatValidator.validate(email);
       if (!isEmailValid) {
         throw new ApolloError("Invalid Email", 500);
       }
@@ -128,6 +128,7 @@ const UserResolver = {
       /**
        * Validate overall user signup input
        */
+      console.log("userInput :>> ", userInput);
       const isValidInput = validateSignUp(userInput);
       if (!isValidInput) {
         throw new UserInputError(
@@ -148,7 +149,7 @@ const UserResolver = {
       /**
        * Check email validity
        */
-      const isEmailValid = validator.validate(userInput.email);
+      const isEmailValid = emailFormatValidator.validate(userInput.email);
       if (!isEmailValid) {
         throw new ApolloError("Invalid Email", 500);
       }
@@ -206,7 +207,7 @@ const UserResolver = {
       /**
        * Check email validity
        */
-      const isEmailValid = validator.validate(userInput.email);
+      const isEmailValid = emailFormatValidator.validate(userInput.email);
       if (!isEmailValid) {
         throw new ApolloError("Invalid Email", 500);
       }

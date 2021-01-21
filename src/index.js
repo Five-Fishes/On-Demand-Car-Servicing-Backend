@@ -13,9 +13,9 @@ import { permissions } from "./utils/validator";
 dotenv.config();
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
-const scheaWithMiddleware = applyMiddleware(schema, permissions);
+const schemaWithMiddleware = applyMiddleware(schema, permissions);
 const server = new ApolloServer({
-  schema: scheaWithMiddleware,
+  schema: schemaWithMiddleware,
   context: ({ req }) => {
     const user = req.user || null;
     return { user };

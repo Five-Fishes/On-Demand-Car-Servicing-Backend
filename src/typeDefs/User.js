@@ -33,7 +33,7 @@ export default gql`
     contactNo: String!
     email: String!
     ip: String
-    vehicle: [VehicleInput!]!
+    vehicle: [VehicleInput!]
     employeeType: String
     favouriteBranch: [FavouriteBranchInput!]
   }
@@ -59,7 +59,7 @@ export default gql`
     contactNo: String!
     email: String!
     ip: String
-    vehicle: [Vehicle!]!
+    vehicle: [Vehicle!]
     employeeType: String
     favouriteBranch: [FavouriteBranch!]
     token: String
