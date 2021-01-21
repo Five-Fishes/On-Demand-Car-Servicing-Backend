@@ -1,5 +1,6 @@
 export {
-  validateLogIn,
-  validateSignUp,
-  validateRole,
+  validateLogIn as validateLogIn,
+  validateSignUp as validateSignUp,
+  validateRole as validateRole,
 } from "./UserInputValidator";
+export { default as permissions } from "./AuthorizationRule";
