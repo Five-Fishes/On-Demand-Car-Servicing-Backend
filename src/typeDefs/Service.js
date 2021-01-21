@@ -21,7 +21,7 @@ export default gql`
   }
 
   input ServiceInput {
-    id: ID!
+    id: ID
     serviceNm: String!
     isDispatchAvailable: Boolean!
     isInHouseAvailable: Boolean!

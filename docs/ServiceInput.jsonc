@@ -1,0 +1,59 @@
+{
+  "serviceInput": {
+    "id": "600a0c69d574e6d7928b04dc",
+    "serviceNm": "ABC - Brake belt replacement",
+    "isDispatchAvailable": true,
+    "isInHouseAvailable": true,
+    "estimatedServiceTime": 360000.0
+  }
+}
+
+// mutation CreateService($serviceInput: ServiceInput!){
+//   createService(serviceInput: $serviceInput){
+//     id
+//     isInHouseAvailable
+//     isDispatchAvailable
+//     estimatedServiceTime
+//     serviceNm
+//   }
+// }
+
+// mutation{
+//   deleteService(id: "600a0bc4993b90d755db3e7c"){
+//     id
+//     isInHouseAvailable
+//     isDispatchAvailable
+//     estimatedServiceTime
+//     serviceNm
+//   }
+// }
+
+// mutation UpdateService($serviceInput: ServiceInput!){
+//   updateService(serviceInput: $serviceInput){
+//     id
+//     serviceNm
+//     isInHouseAvailable
+//     isDispatchAvailable
+//     estimatedServiceTime
+//   }
+// }
+
+// query{
+//   services(filter: "{}"){
+//     id
+//     serviceNm
+//     isInHouseAvailable
+//     isDispatchAvailable
+//     estimatedServiceTime
+//   }
+// }
+
+// query{
+//   service(id: "600a0c69d574e6d7928b04dc"){
+//     id
+//     serviceNm
+//     isInHouseAvailable
+//     isDispatchAvailable
+//     estimatedServiceTime
+//   }
+// }
