@@ -12,7 +12,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   playground: true,
-  mocks: false,
+  mocks: !!+process.env.MOCK,
 });
 const app = express();
 server.applyMiddleware({ app });
