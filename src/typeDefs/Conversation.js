@@ -2,24 +2,34 @@ import { gql } from "apollo-server-express";
 
 export default gql`
   extend type Query {
-    conversations(filter: String!): [Conversation!]!
-    conversation(id: ID!): Conversation!
+    getConversations(filter: String, users: [ID!]): [Conversation!]!
+    getConversation(id: ID!): Conversation!
   }
 
   extend type Mutation {
     createConversation(conversationInput: ConversationInput!): Conversation!
     updateConversation(conversationInput: ConversationInput!): Conversation!
-    deleteConversation(conversationId: String!): Conversation!
+    deleteConversation(id: String!): String!
   }
 
   input ConversationInput {
-    conversationID: ID!
+    id: String
     conversationName: String!
+    members: [ID!]
   }
 
   type Conversation {
-    conversationID: ID!
+    id: String!
     conversationName: String!
+    members: [ConversationMember!]
+  }
+
+  type ConversationMember {
+    type: String!
+    employeeType: String
+    firstName: String!
+    lastName: String!
+    contactNo: String!
   }
 
 `;
