@@ -10,12 +10,14 @@ const UserSchema = new mongoose.Schema(
     contactNo: String,
     email: String,
     ip: String,
-    vehicle: {
-      vehicleType: String,
-      vehicleBrand: String,
-      vehicleModel: String,
-      vehiclePlateNumber: String,
-    },
+    vehicle: [
+      {
+        vehicleType: String,
+        vehicleBrand: String,
+        vehicleModel: String,
+        vehiclePlateNumber: String,
+      },
+    ],
     employeeType: String,
     favouriteBranch: [
       {
