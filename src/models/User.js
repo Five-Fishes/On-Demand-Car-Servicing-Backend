@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
@@ -19,6 +19,10 @@ const UserSchema = new mongoose.Schema(
       },
     ],
     employeeType: String,
+    employmentBranch: {
+      type: Schema.Types.ObjectId,
+      ref: "Branch",
+    },
     favouriteBranch: [
       {
         favouriteBranchID: String,

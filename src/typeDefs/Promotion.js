@@ -15,8 +15,8 @@ export default gql`
   type Promotion {
     id: ID!
     promotionNm: String!
-    promotionStart: Date!
-    promotionEnd: Date!
+    promotionStart: String!
+    promotionEnd: String!
     image: ImageStorage!
     serivces: [PromotionService!]!
     branches: [PromotionBranch!]!
@@ -55,8 +55,8 @@ export default gql`
   input PromotionInput {
     id: ID!
     promotionNm: String!
-    promotionStart: Date!
-    promotionEnd: Date!
+    promotionStart: String!
+    promotionEnd: String!
     image: ImageStorageInput!
     serivces: [PromotionServiceInput!]!
     branches: [PromotionBranchInput!]!
