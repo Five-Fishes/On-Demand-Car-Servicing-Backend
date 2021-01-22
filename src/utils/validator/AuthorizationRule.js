@@ -16,6 +16,9 @@ const permissions = shield({
     deleteUser: isAuthenticated,
     createMessage: isAuthenticated,
     deleteMessage: isAuthenticated,
+    // Image Storage
+    createImageStorage: isAuthenticated,
+    updateImageStorage: isAuthenticated,
   },
 });
 
