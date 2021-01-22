@@ -46,15 +46,13 @@ const ImageStorageResolver = {
         throw new UserInputError("Update Image Storage must have id");
       }
       try {
-        return await ImageStorage.findByIdAndUpdate(imageStorageInput.id, {
+        const imageStorage = await ImageStorage.findByIdAndUpdate(imageStorageInput.id, {
           imageSize: imageStorageInput.imageSize,
           imageURL: imageStorageInput.imageURL,
           imageFileNm: imageStorageInput.imageFileNm,
           imageType: imageStorageInput.imageType
         }, {new: true})
-        .then(res => {          
-          return convertImageSizeDecimal(res);
-        })
+        return convertImageSizeDecimal(imageStorage);
       } catch (err) {
         throw new ApolloError(err);
       }
