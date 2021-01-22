@@ -9,19 +9,26 @@ export default gql`
   extend type Mutation {
     createConversation(conversationInput: ConversationInput!): Conversation!
     updateConversation(conversationInput: ConversationInput!): Conversation!
-    deleteConversation(id: String!): String!
+    # deleteConversation(id: String!): String!
   }
 
   input ConversationInput {
     id: String
-    conversationName: String!
-    members: [ID!]
+    type: ConversationType!
+    conversationName: String
+    members: [ID!]!
   }
 
   type Conversation {
     id: String!
+    type: ConversationType!
     conversationName: String!
     members: [ConversationMember!]
+  }
+
+  enum ConversationType {
+    PERSONAL
+    GROUP
   }
 
   type ConversationMember {

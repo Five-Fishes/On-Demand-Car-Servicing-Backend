@@ -54,13 +54,13 @@ export default gql`
     type: UserType!
     firstName: String!
     lastName: String!
-    password: String!
     dateOfBirth: String!
     contactNo: String!
     email: String!
     ip: String
     vehicle: [Vehicle!]
     employeeType: String
+    employmentBranch: String
     favouriteBranch: [FavouriteBranch!]
     token: String
   }
