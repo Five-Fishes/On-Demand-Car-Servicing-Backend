@@ -10,12 +10,18 @@ const permissions = shield({
     user: isAuthenticated,
     getMessages: isAuthenticated,
     getMessage: isAuthenticated,
+    // Dispatch Service
+    getDispatchServices: isAuthenticated,
+    getDispatchService: isAuthenticated,
   },
   Mutation: {
     updateUser: isAuthenticated,
     deleteUser: isAuthenticated,
     createMessage: isAuthenticated,
     deleteMessage: isAuthenticated,
+    // Dispatch Service
+    createDispatchService: isAuthenticated,
+    updateDispatchService: isAuthenticated,
   },
 });
 
