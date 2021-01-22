@@ -1,0 +1,138 @@
+{
+  "promotionInput": {
+    "id": "6009f0cd3e809ad222fe06e9",
+    "promotionNm": "CNY Promo",
+    "promotionStart": "2021-01-29T15:24:51.425Z",
+    "promotionEnd": "2021-01-31T15:24:51.425Z",
+    "image": {
+      "id": "",
+      "imageSize": 123.12,
+      "imageURL": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.locusassignments.com%2Fmethods-of-sales-promotion-at-the-consumers-level%2F&psig=AOvVaw3CcIcjVCsAw8ANAJU8eWx2&ust=1611350730564000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKDKz7H7re4CFQAAAAAdAAAAABAD",
+      "imageFileNm": "image.png",
+      "imageType": "png"
+    },
+    "promotionService": [
+      {
+        "id": "",
+        "serviceNm": "battery renewal",
+        "isDispatchAvailable": true,
+        "isInHouseAvailable": true,
+        "estimatedServiceTime": 360000.0
+      }
+    ],
+    "promotionBranch": [
+      {
+        "id": "",
+        "branchAddr": "UM Pantai Dalam",
+        "branchContactNo": "+60143360623"
+      }
+    ],
+    "promoCode": "Ong ah",
+    "discountAmt": 0.52
+  }
+}
+
+// query{
+//   promotions(filter: "{}"){
+//     id
+//     promotionNm
+//     promotionStart
+//     promotionEnd
+//     image{
+//       imageURL
+//       imageSize
+//     }
+//     promotionService{
+//       estimatedServiceTime
+//     }
+//     promotionBranch{
+//       branchAddr
+//     }
+//     promoCode
+//     discountAmt
+//   }
+// }
+
+// query{
+//   promotion(id: "6009f06e986f5fd215abd071"){
+//     id
+//     promotionNm
+//     promotionStart
+//     promotionEnd
+//     image{
+//       imageURL
+//       imageSize
+//     }
+//     promotionService{
+//       estimatedServiceTime
+//     }
+//     promotionBranch{
+//       branchAddr
+//     }
+//     promoCode
+//     discountAmt
+//   }
+// }
+
+// mutation CreatePromotion($promotionInput: PromotionInput!){
+//   createPromotion(promotionInput: $promotionInput){
+//     id
+//     promotionNm
+//     promotionStart
+//     promotionEnd
+//     image{
+//       imageURL
+//       imageSize
+//     }
+//     promotionService{
+//       estimatedServiceTime
+//     }
+//     promotionBranch{
+//       branchAddr
+//     }
+//     promoCode
+//     discountAmt
+//   }
+// }
+
+// mutation{
+//   deletePromotion(id: "6009f06e986f5fd215abd071"){
+//     id
+//     promotionNm
+//     promotionStart
+//     promotionEnd
+//     image{
+//       imageURL
+//       imageSize
+//     }
+//     promotionService{
+//       estimatedServiceTime
+//     }
+//     promotionBranch{
+//       branchAddr
+//     }
+//     promoCode
+//     discountAmt
+//   }
+// }
+
+// mutation UpdatePromotion($promotionInput: PromotionInput!){
+//   updatePromotion(promotionInput: $promotionInput){
+//     id
+//     promotionNm
+//     promotionStart
+//     promotionEnd
+//     image{
+//       imageURL
+//       imageSize
+//     }
+//     promotionService{
+//       estimatedServiceTime
+//     }
+//     promotionBranch{
+//       branchAddr
+//     }
+//     promoCode
+//     discountAmt
+//   }
+// }

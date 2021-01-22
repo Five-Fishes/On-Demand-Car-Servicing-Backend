@@ -1,0 +1,49 @@
+// query{
+//   videoStorages(filter: "{}"){
+//     id
+//     videoURL
+//     videoSize
+//     videoType
+//     videoFileNm
+//   }
+// }
+
+// query{
+//   videoStorage(id: "600a75d18027d8df7e394660"){
+//         id
+//     videoURL
+//     videoSize
+//     videoType
+//     videoFileNm
+//   }
+// }
+
+// mutation UpdateVideoStorage($videoStorageInput: VideoStorageInput!){
+//   updateVideoStorage(videoStorageInput: $videoStorageInput){
+//     id
+//     videoURL
+//     videoSize
+//     videoType
+//     videoFileNm
+//   }
+// }
+
+// mutation CreateVideoStorage($videoStorageInput: VideoStorageInput!){
+//   createVideoStorage(videoStorageInput: $videoStorageInput){
+//     id
+//     videoURL
+//     videoSize
+//     videoType
+//     videoFileNm
+//   }
+// }
+
+{
+  "videoStorageInput": {
+    "id": null,
+    "videoSize": 123.12,
+    "videoURL": "https://www.youtube.com/watch?v=3fGQ8pF3wYU",
+    "videoType": "youtube",
+    "videoFileNm": "The Sad Reality"
+  }
+}

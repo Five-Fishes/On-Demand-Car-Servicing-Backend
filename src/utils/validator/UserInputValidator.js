@@ -46,6 +46,6 @@ export const validateRole = (userInput) => {
     /**
      * If User is not employee, he must have null employee type
      */
-    return userInput.employeeType === null;
+    return userInput.employeeType === EMPLOYEE_TYPE.NONE;
   }
 };
