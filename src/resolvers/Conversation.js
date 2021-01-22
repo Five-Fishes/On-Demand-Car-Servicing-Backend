@@ -63,7 +63,7 @@ const ConversationResolver = {
         conversations.map(conversation => getConversationName(conversation, context.user.id));
         return conversations;
       } catch (err) {
-        throw new ApolloError(err.message);
+        return new ApolloError(err.message);
       }
     },
     async getConversation(_, { id }, context) {
@@ -72,29 +72,29 @@ const ConversationResolver = {
           .findById(id)
           .populate("members");
         if (!isMemberOfConversation(conversation, context.user.id)) {
-          throw new AuthenticationError("User not belong to the conversation");
+          return new AuthenticationError("User not belong to the conversation");
         }
         return getConversationName(conversation, context.user.id);
       } catch (err) {
-        throw new ApolloError(err.message);
+        return new ApolloError(err.message);
       }
     }
   },
   Mutation: {
     async createConversation(_, { conversationInput }, context) {
       if (conversationInput.id) {
-        throw new ApolloError("New Conversation cannot have id");
+        return new ApolloError("New Conversation cannot have id");
       }
       if (!validateConversationName(conversationInput)) {
-        throw new UserInputError("Conversation name required for GROUP chat");
+        return new UserInputError("Conversation name required for GROUP chat");
       }
       conversationInput.members = getUniqueMembersIdList(conversationInput.members);
       const membersNumberCheck = validateNumberOfMembers(conversationInput.type, conversationInput.members);
       if (membersNumberCheck !== true) {
-        throw new UserInputError(membersNumberCheck);
+        return new UserInputError(membersNumberCheck);
       }
       if (!conversationInput.members.includes(context.user.id.toString())) {
-        throw new UserInputError("Cannot create a conversation without yourself");
+        return new UserInputError("Cannot create a conversation without yourself");
       }
       const newConversation = new Conversation({
         ...conversationInput
@@ -107,25 +107,25 @@ const ConversationResolver = {
     },
     async updateConversation(_, { conversationInput }, context) {
       if (!conversationInput.id) {
-        throw new UserInputError("Update Conversation must have id");
+        return new UserInputError("Update Conversation must have id");
       }
       let originalConversation = await Conversation
         .findById(conversationInput.id)
         .populate("members");
       if (!originalConversation) {
-        throw new ApolloError("Conversation is not exist");
+        return new ApolloError("Conversation is not exist");
       }
       if (!isMemberOfConversation(originalConversation, context.user.id)) {
-        throw new AuthenticationError("User not belong to the conversation");
+        return new AuthenticationError("User not belong to the conversation");
       }
 
       if (!validateConversationName(conversationInput)) {
-        throw new UserInputError("Conversation name required for GROUP chat");
+        return new UserInputError("Conversation name required for GROUP chat");
       }
       conversationInput.members = getUniqueMembersIdList(conversationInput.members);
       const membersNumberCheck = validateNumberOfMembers(conversationInput.type, conversationInput.members);
       if (membersNumberCheck !== true) {
-        throw new UserInputError(membersNumberCheck);
+        return new UserInputError(membersNumberCheck);
       }
       try {
         let conversation = await Conversation.findByIdAndUpdate(conversationInput.id, {
@@ -138,7 +138,7 @@ const ConversationResolver = {
           .populate("members")
           .execPopulate();
       } catch (err) {
-        throw new ApolloError(err.message);
+        return new ApolloError(err.message);
       }
     },
   /**
@@ -146,21 +146,21 @@ const ConversationResolver = {
    */
   //   async deleteConversation(_, { id }, context) {
   //     if (!id) {
-  //       throw new UserInputError("Delete Conversation must have id");
+  //       return new UserInputError("Delete Conversation must have id");
   //     }
       
   //     try {
   //       const conversation = await Conversation.findById(id);
   //       if (conversation === null) {
-  //         throw new ApolloError("Conversation is not exist");
+  //         return new ApolloError("Conversation is not exist");
   //       }
   //       if (!isMemberOfConversation(originalConversation, context.user.id)) {
-  //         throw new AuthenticationError("User not belong to the conversation");
+  //         return new AuthenticationError("User not belong to the conversation");
   //       }
   //       await conversation.delete();
   //       return "Conversation Deleted Successfully";
   //     } catch(err) {
-  //       throw new ApolloError(err.message);
+  //       return new ApolloError(err.message);
   //     }
   //   }
   }

@@ -41,7 +41,7 @@ const UserResolver = {
        */
 
       if (filter === null) {
-        throw new UserInputError("No filter provided, use {} to get all");
+        return new UserInputError("No filter provided, use {} to get all");
       }
 
       /**
@@ -64,13 +64,13 @@ const UserResolver = {
        */
       if (id) {
         if (!mongoose.Types.ObjectId.isValid(id)) {
-          throw new UserInputError(`${id} is not a valid user ID`);
+          return new UserInputError(`${id} is not a valid user ID`);
         }
 
         const user = await User.findById(id);
         return user;
       } else {
-        throw new UserInputError("No ID provided");
+        return new UserInputError("No ID provided");
       }
     },
   },
@@ -91,7 +91,7 @@ const UserResolver = {
        */
       const isEmailValid = emailFormatValidator.validate(email);
       if (!isEmailValid) {
-        throw new ApolloError("Invalid Email", 500);
+        return new ApolloError("Invalid Email", 500);
       }
 
       /**
@@ -134,7 +134,7 @@ const UserResolver = {
       console.log("userInput :>> ", userInput);
       const isValidInput = validateSignUp(userInput);
       if (!isValidInput) {
-        throw new UserInputError(
+        return new UserInputError(
           "User input contains null in non nullable field"
         );
       }
@@ -146,7 +146,7 @@ const UserResolver = {
        */
       const isRoleValid = validateRole(userInput);
       if (!isRoleValid) {
-        throw new UserInputError("Invalid user type and employee type pairs");
+        return new UserInputError("Invalid user type and employee type pairs");
       }
 
       /**
@@ -154,7 +154,7 @@ const UserResolver = {
        */
       const isEmailValid = emailFormatValidator.validate(userInput.email);
       if (!isEmailValid) {
-        throw new ApolloError("Invalid Email", 500);
+        return new ApolloError("Invalid Email", 500);
       }
 
       /**
@@ -164,7 +164,7 @@ const UserResolver = {
         email: userInput.email,
       });
       if (isEmailTaken) {
-        throw new ApolloError("Email Already Taken", 500);
+        return new ApolloError("Email Already Taken", 500);
       }
 
       /**
@@ -204,7 +204,7 @@ const UserResolver = {
       }
 
       if (!mongoose.Types.ObjectId.isValid(userInput.id)) {
-        throw new UserInputError(`${userInput.id} is not a valid user ID`);
+        return new UserInputError(`${userInput.id} is not a valid user ID`);
       }
 
       /**
@@ -212,7 +212,7 @@ const UserResolver = {
        */
       const isEmailValid = emailFormatValidator.validate(userInput.email);
       if (!isEmailValid) {
-        throw new ApolloError("Invalid Email", 500);
+        return new ApolloError("Invalid Email", 500);
       }
 
       /**
@@ -222,7 +222,7 @@ const UserResolver = {
         email: userInput.email,
       });
       if (existingUser && existingUser.id !== userInput.id) {
-        throw new ApolloError("Email Already Taken", 500);
+        return new ApolloError("Email Already Taken", 500);
       }
 
       /**
@@ -232,7 +232,7 @@ const UserResolver = {
        */
       const isRoleValid = validateRole(userInput);
       if (!isRoleValid) {
-        throw new UserInputError("Invalid user type and employee type pairs");
+        return new UserInputError("Invalid user type and employee type pairs");
       }
 
       /**
@@ -244,7 +244,7 @@ const UserResolver = {
         existingUser.password
       );
       if (!isPasswordSame) {
-        throw new UserInputError(
+        return new UserInputError(
           "Invalid attempt to update password via this mutation"
         );
       }
@@ -262,7 +262,7 @@ const UserResolver = {
     deleteUser: async (root, { userId }, context, info) => {
       if (userId) {
         if (!mongoose.Types.ObjectId.isValid(userId)) {
-          throw new UserInputError(`${userId} is not a valid user ID`);
+          return new UserInputError(`${userId} is not a valid user ID`);
         }
         /**
          * Check for authorisation to delete

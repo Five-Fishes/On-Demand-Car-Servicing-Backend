@@ -18,32 +18,39 @@ const ImageStorageResolver = {
         imageStorages.map(data => convertImageSizeDecimal(data));
         return imageStorages;
       } catch (err) {
-        throw new ApolloError(err);
+        return new ApolloError(err.message);
       }
     },
     async getImageStorage(_, { id }) {
       try {
         let imageStorage = await ImageStorage.findById(id);
+        if (!imageStorage) {
+          return new ApolloError("Image Storage not found with id");
+        }
         return convertImageSizeDecimal(imageStorage);
       } catch (err) {
-        throw new ApolloError(err);
+        return new ApolloError(err.message);
       }
     }
   },
   Mutation: {
     async createImageStorage(_, { imageStorageInput }) {
       if (imageStorageInput.id) {
-        throw new ApolloError("New Image Storage cannot have id");
+        return new ApolloError("New Image Storage cannot have id");
       }
       const newImageStorage = new ImageStorage({
         ...imageStorageInput
       });
-      let imageStorage = await newImageStorage.save();
-      return convertImageSizeDecimal(imageStorage);
+      try{
+        let imageStorage = await newImageStorage.save();
+        return convertImageSizeDecimal(imageStorage);
+      } catch(err) {
+        return new ApolloError(err.message);
+      }
     },
     async updateImageStorage(_, { imageStorageInput }) {
       if (!imageStorageInput.id) {
-        throw new UserInputError("Update Image Storage must have id");
+        return new UserInputError("Update Image Storage must have id");
       }
       try {
         const imageStorage = await ImageStorage.findByIdAndUpdate(imageStorageInput.id, {
@@ -54,7 +61,7 @@ const ImageStorageResolver = {
         }, {new: true})
         return convertImageSizeDecimal(imageStorage);
       } catch (err) {
-        throw new ApolloError(err);
+        return new ApolloError(err.message);
       }
     }
   }

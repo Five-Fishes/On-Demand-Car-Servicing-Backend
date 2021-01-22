@@ -34,7 +34,7 @@ const ServiceResolver = {
        * validate filter
        */
       if (filter === null) {
-        throw new UserInputError("No filter provided");
+        return new UserInputError("No filter provided");
       }
 
       /**
@@ -43,7 +43,7 @@ const ServiceResolver = {
       try {
         filter = JSON.parse(filter);
       } catch (error) {
-        throw new ApolloError("Unable to resolve filter", 500);
+        return new ApolloError("Unable to resolve filter", 500);
       }
 
       /**
@@ -128,7 +128,7 @@ const ServiceResolver = {
        * validate role
        */
       if (!roleValidator(type, employeeType)) {
-        throw new ApolloError(
+        return new ApolloError(
           "Only brand owner and manager can perform this operation"
         );
       }
@@ -184,7 +184,7 @@ const ServiceResolver = {
         type !== USER_TYPE.CUSTOMER &&
         type !== USER_TYPE.EMPLOYEE;
       if (!isAdmin) {
-        throw new ApolloError("User do not have access right to delete", 500);
+        return new ApolloError("User do not have access right to delete", 500);
       }
 
       /**

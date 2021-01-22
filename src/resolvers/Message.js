@@ -24,7 +24,7 @@ const MessageResolver = {
         messages.map(data => convertMessageDecimalContent(data));
         return messages;
       } catch(err) {
-        throw new ApolloError(err.message);
+        return new ApolloError(err.message);
       }
     },
     async getMessage(_, { id }) {
@@ -33,19 +33,19 @@ const MessageResolver = {
           .populate("sender");
         return convertMessageDecimalContent(message);
       } catch(err) {
-        throw new ApolloError(err.message);
+        return new ApolloError(err.message);
       }
     }
   },
   Mutation: {
     async createMessage(_, { messageInput }, context) {
       if (messageInput.id) {
-        throw new UserInputError("New Message cannot have id");
+        return new UserInputError("New Message cannot have id");
       }
       try {
-        const res = await validateChat(messageInput.chatID, context.user.id);
-        if (res !== true) {
-          throw new ApolloError(res);
+        const chatChecked = await validateChat(messageInput.chatID, context.user.id);
+        if (chatChecked !== true) {
+          return new ApolloError(chatChecked);
         }
         const newMessage = new Message({
           ...messageInput,
@@ -58,30 +58,30 @@ const MessageResolver = {
           .execPopulate();
         return convertMessageDecimalContent(message);
       } catch(err) {
-        throw new ApolloError(err.message);
+        return new ApolloError(err.message);
       }
     },
     async deleteMessage(_, { id }, context) {
       if (!id) {
-        throw new UserInputError("Delete Message must have id");
+        return new UserInputError("Delete Message must have id");
       }
       try {
         const message = await Message.findById(id)
           .populate("sender");
         if (message === null) {
-          throw new ApolloError("Message is not exist");
+          return new ApolloError("Message is not exist");
         }
         const res = await validateChat(message.chatID, context.user.id);
         if (res !== true) {
-          throw new ApolloError(res);
+          return new ApolloError(res);
         }
         if (message._doc.sender.id !== context.user.id) {
-          throw new ApolloError("Message is not belong to logged in user");
+          return new ApolloError("Message is not belong to logged in user");
         }
         await message.delete();
         return "Message Deleted Successfully";
       } catch(err) {
-        throw new ApolloError(err.message);
+        return new ApolloError(err.message);
       }
     }
   }
