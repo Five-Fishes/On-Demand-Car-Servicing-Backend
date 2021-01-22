@@ -22,6 +22,7 @@ const generateToken = (user) => {
       id: user._id,
       type: user.type,
       employeeType: user.employeeType,
+      employmentBranch: user.employmentBranch,
     },
     process.env.SECRET_KEY,
     {
