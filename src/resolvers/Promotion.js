@@ -234,6 +234,7 @@ const PromotionResolver = {
       /**
        * - only allow loggedin brandowner
        * - validate id
+       * - validate date, if started, cannot delete
        * - delete
        */
 
@@ -249,6 +250,14 @@ const PromotionResolver = {
        */
       if (!mongoose.Types.ObjectId.isValid(id)) {
         throw UserInputError("Invalid Id format");
+      }
+
+      /**
+       * validate date, if started cannot delete
+       */
+      const existingPromotion = await Promotion.findById(id);
+      if (new Date(existingPromotion.promotionStart) > Date.now()) {
+        throw new ApolloError("Started promotion cannot be deleted");
       }
 
       let deletedPromotion = await Promotion.findByIdAndDelete(id);
