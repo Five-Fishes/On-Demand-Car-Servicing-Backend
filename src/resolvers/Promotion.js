@@ -144,12 +144,10 @@ const PromotionResolver = {
 
       /**
        * date range validity check:
-       * - must start at least one week from now
+       * - must start after now
        * - end date > start date
        */
-      const validStartDt =
-        new Date(promotionInput.promotionStart) >
-        new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
+      const validStartDt = new Date(promotionInput.promotionStart) > Date.now();
       const validEndDt =
         new Date(promotionInput.promotionStart) <
         new Date(promotionInput.promotionEnd);
@@ -201,10 +199,7 @@ const PromotionResolver = {
       const existingPromotion = await Promotion.findOne({
         promotionNm: { $eq: promotionInput.promotionNm },
       });
-      if (
-        existingPromotion &&
-        existingPromotion.promotionNm !== promotionInput.promotionNm
-      ) {
+      if (existingPromotion && existingPromotion.id !== promotionInput.id) {
         if (new Date(existingPromotion.promotionEnd) > Date.now()) {
           throw new ApolloError("Prmotion name alread taken");
         }
