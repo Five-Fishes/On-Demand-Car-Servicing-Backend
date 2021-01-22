@@ -15,6 +15,7 @@ export default gql`
   type Service {
     id: ID!
     serviceNm: String!
+    serviceType: ServiceType!
     isDispatchAvailable: Boolean!
     isInHouseAvailable: Boolean!
     estimatedServiceTime: Float!
@@ -23,8 +24,14 @@ export default gql`
   input ServiceInput {
     id: ID
     serviceNm: String!
+    serviceType: ServiceType!
     isDispatchAvailable: Boolean!
     isInHouseAvailable: Boolean!
     estimatedServiceTime: Float!
+  }
+
+  enum ServiceType {
+    PRIMARY
+    SECONDARY
   }
 `;

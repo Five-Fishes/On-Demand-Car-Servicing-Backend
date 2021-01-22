@@ -147,6 +147,18 @@ const ServiceResolver = {
       if (existingService === null) {
         throw UserInputError("no service with this ID");
       }
+
+      /**
+       * prevent name duplication
+       * check if same name but different id (means not itself)
+       */
+      let serviceByName = await Service.find({
+        serviceNm: { $eq: serviceInput.serviceNm },
+      });
+      if (serviceByName.id !== serviceInput.id) {
+        throw ApolloError("Name taken", 500);
+      }
+
       let service = await Service.findByIdAndUpdate(
         serviceInput.id,
         serviceInput,
@@ -159,7 +171,7 @@ const ServiceResolver = {
     deleteService: async (root, { id }, context, info) => {
       /**
        * - validate, disallow if provided id
-       * - only allow brand owner, manager to delete
+       * - only allow brand owner
        */
 
       /**
@@ -178,9 +190,7 @@ const ServiceResolver = {
        * only brand owner for deletion
        */
       if (roleValidator(type, employeeType)) {
-        console.log("validation error");
         if (type === USER_TYPE.EMPLOYEE) {
-          console.error("error here");
           throw new ApolloError("User do not have enough access right", 500);
         }
       }
