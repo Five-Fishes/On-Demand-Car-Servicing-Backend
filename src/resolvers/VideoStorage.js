@@ -21,7 +21,7 @@ const VideoStorageResolver = {
        * validate filter
        */
       if (filter === null) {
-        throw new UserInputError("No fiilter provided");
+        return new UserInputError("No fiilter provided");
       }
 
       /**
@@ -30,7 +30,7 @@ const VideoStorageResolver = {
       try {
         filter = JSON.parse(filter);
       } catch (error) {
-        throw new ApolloError("Invalid filter format", 500);
+        return new ApolloError("Invalid filter format", 500);
       }
 
       /**
@@ -51,7 +51,7 @@ const VideoStorageResolver = {
        * id validity check
        */
       if (id === null || !mongoose.Types.ObjectId.isValid(id)) {
-        throw new UserInputError("Please check ID provided");
+        return new UserInputError("Please check ID provided");
       }
 
       /**
@@ -59,7 +59,7 @@ const VideoStorageResolver = {
        */
       let video = await VideoStorage.findById(id);
       if (video === null) {
-        throw new ApolloError("Resource not found", 500);
+        return new ApolloError("Resource not found", 500);
       }
       video = videoSizeConverter(video);
 
@@ -77,7 +77,7 @@ const VideoStorageResolver = {
        * id validity check
        */
       if (videoStorageInput.id) {
-        throw new UserInputError("ID must be null to create");
+        return new UserInputError("ID must be null to create");
       }
 
       /**
@@ -87,7 +87,7 @@ const VideoStorageResolver = {
       try {
         newVideo = await VideoStorage.create(videoStorageInput);
       } catch (error) {
-        throw new ApolloError("Failed to insert ");
+        return new ApolloError("Failed to insert ");
       }
       newVideo = videoSizeConverter(newVideo);
 
@@ -106,7 +106,7 @@ const VideoStorageResolver = {
         videoStorageInput.id === null ||
         !mongoose.Types.ObjectId.isValid(videoStorageInput.id)
       ) {
-        throw new UserInputError("Invalid ID provided");
+        return new UserInputError("Invalid ID provided");
       }
 
       /**
@@ -114,7 +114,7 @@ const VideoStorageResolver = {
        */
       const existingVideo = await VideoStorage.findById(videoStorageInput.id);
       if (existingVideo === null) {
-        throw new ApolloError(
+        return new ApolloError(
           `No video with ID:${videoStorageInput.id} is found`,
           500
         );

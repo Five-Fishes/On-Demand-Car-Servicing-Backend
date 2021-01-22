@@ -51,7 +51,7 @@ const PromotionResolver = {
        * - retrive based on filter
        */
       if (filter === null) {
-        throw new UserInputError("Invalid filter");
+        return new UserInputError("Invalid filter");
       }
 
       /**
@@ -61,7 +61,7 @@ const PromotionResolver = {
       try {
         parsedFilter = JSON.parse(filter);
       } catch (error) {
-        throw new ApolloError(error, 500);
+        return new ApolloError(error, 500);
       }
 
       /**
@@ -85,14 +85,14 @@ const PromotionResolver = {
        * check id validity
        */
       if (id === null) {
-        throw new UserInputError("No ID provided");
+        return new UserInputError("No ID provided");
       }
 
       /**
        * validate id format
        */
       if (!mongoose.Types.ObjectId.isValid(id))
-        throw new UserInputError(`${id} is having an invalid format`);
+        return new UserInputError(`${id} is having an invalid format`);
 
       /**
        * retrive based on id
@@ -125,7 +125,7 @@ const PromotionResolver = {
        * disallow id
        */
       if (promotionInput.id !== null) {
-        throw new UserInputError("ID not allowed while creating promotion");
+        return new UserInputError("ID not allowed while creating promotion");
       }
 
       /**
@@ -139,7 +139,7 @@ const PromotionResolver = {
         existingPromotion &&
         new Date(existingPromotion.promotionEnd) > Date.now()
       ) {
-        throw new ApolloError("Prmotion name alread taken");
+        return new ApolloError("Prmotion name alread taken");
       }
 
       /**
@@ -188,7 +188,7 @@ const PromotionResolver = {
       const validId = mongoose.Types.ObjectId.isValid(promotionInput.id);
       const existingPromotionById = await Promotion.findById(promotionInput.id);
       if (!validId || existingPromotionById === null) {
-        throw new UserInputError("Invalid ID");
+        return new UserInputError("Invalid ID");
       }
 
       /**
@@ -201,7 +201,7 @@ const PromotionResolver = {
       });
       if (existingPromotion && existingPromotion.id !== promotionInput.id) {
         if (new Date(existingPromotion.promotionEnd) > Date.now()) {
-          throw new ApolloError("Prmotion name alread taken");
+          return new ApolloError("Prmotion name alread taken");
         }
       }
 
@@ -257,7 +257,7 @@ const PromotionResolver = {
        */
       const existingPromotion = await Promotion.findById(id);
       if (new Date(existingPromotion.promotionStart) > Date.now()) {
-        throw new ApolloError("Started promotion cannot be deleted");
+        return new ApolloError("Started promotion cannot be deleted");
       }
 
       let deletedPromotion = await Promotion.findByIdAndDelete(id);

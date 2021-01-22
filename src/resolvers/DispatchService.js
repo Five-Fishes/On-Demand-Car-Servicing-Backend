@@ -98,7 +98,7 @@ const DispatchServiceResolver = {
         dispatchServices.map(data => convertEstimatedServiceTime(data));
         return dispatchServices;
       } catch(err) {
-        throw new ApolloError(err.message);
+        return new ApolloError(err.message);
       }
     },
     async getDispatchService(_, { id }) {
@@ -111,26 +111,26 @@ const DispatchServiceResolver = {
           .populate("branch");
         return convertEstimatedServiceTime(dispatchService);
       } catch(err) {
-        throw new ApolloError(err.message);
+        return new ApolloError(err.message);
       }
     }
   },
   Mutation: {
     async createDispatchService(_, { dispatchServiceInput }, context) {
       if (dispatchServiceInput.id) {
-        throw new UserInputError("New Dispatch Service cannot have id");
+        return new UserInputError("New Dispatch Service cannot have id");
       }
       if (context.user.type !== USER_TYPE.CUSTOMER) {
-        throw new AuthenticationError("Only customer can create dispatch service");
+        return new AuthenticationError("Only customer can create dispatch service");
       }
       if (new Date(dispatchServiceInput.dispatchTimeStamp) < Date.now()) {
-        throw new UserInputError("Dispatch Service Timestamp cannot be early than now");
+        return new UserInputError("Dispatch Service Timestamp cannot be early than now");
       }
 
       const branch= await Branch.findById(dispatchServiceInput.branch);
       const branchChecked = validateBranchService(branch, dispatchServiceInput.service);
       if (branchChecked !== true) {
-        throw new UserInputError(branchChecked);
+        return new UserInputError(branchChecked);
       }
       
       try {
@@ -150,29 +150,29 @@ const DispatchServiceResolver = {
           .execPopulate();
         return convertEstimatedServiceTime(dispatchService);
       } catch(err) {
-        throw new ApolloError(err.message);
+        return new ApolloError(err.message);
       }
     },
     async updateDispatchService(_, { dispatchServiceInput }, context) {
       if (!dispatchServiceInput.id) {
-        throw new UserInputError("Update Dispatch Service must have id");
+        return new UserInputError("Update Dispatch Service must have id");
       }
       try {
         let originalDispatchService = await DispatchService.findById(dispatchServiceInput.id);
         if (!originalDispatchService) {
-          throw new ApolloError("Dispatch Service not found with id");
+          return new ApolloError("Dispatch Service not found with id");
         }
         if (
           originalDispatchService.status === DISPATCH_SERVICE_STATUS.CANCELLED || 
           originalDispatchService.status === DISPATCH_SERVICE_STATUS.REJECTED
         ) {
-          throw new ApolloError("Cancelled/Rejected Dispatch Service cannot be update");
+          return new ApolloError("Cancelled/Rejected Dispatch Service cannot be update");
         }
         
         if (dispatchServiceInput.status !== originalDispatchService.status) {
           const statusUpdateCheck = validateUpdateStatus(originalDispatchService, context.user, dispatchServiceInput.status)
           if (statusUpdateCheck !== true) {
-            throw new ApolloError(statusUpdateCheck);
+            return new ApolloError(statusUpdateCheck);
           }
         }
         let dispatchService = await DispatchService.findByIdAndUpdate(dispatchServiceInput.id, {
@@ -190,7 +190,7 @@ const DispatchServiceResolver = {
           .execPopulate();
         return convertEstimatedServiceTime(dispatchService);
       } catch(err) {
-        throw new ApolloError(err.message);
+        return new ApolloError(err.message);
       }
     }
   }
