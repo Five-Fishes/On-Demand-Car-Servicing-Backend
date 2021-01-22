@@ -2,8 +2,8 @@ import { gql } from "apollo-server-express";
 
 export default gql`
   extend type Query {
-    VideoStorages(filter: String!): [VideoStorage!]!
-    VideoStorage(id: String!): VideoStorage!
+    videoStorages(filter: String!): [VideoStorage!]!
+    videoStorage(id: String!): VideoStorage!
   }
 
   extend type Mutation {

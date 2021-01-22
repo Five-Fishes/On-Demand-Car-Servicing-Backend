@@ -1,5 +1,6 @@
 import Message from "../models/Message";
 import User from "../models/User";
+import Conversation from "../models/Conversation";
 import { ApolloError, UserInputError } from "apollo-server-express";
 
 const MessageType = {
@@ -18,7 +19,8 @@ const MessageResolver = {
       }
       try {
         let messages = await Message.find(filterJson)
-          .populate("sender");
+          .populate("sender")
+          .sort({createdAt: "desc"});
         messages.map(data => convertMessageDecimalContent(data));
         return messages;
       } catch(err) {
@@ -36,25 +38,30 @@ const MessageResolver = {
     }
   },
   Mutation: {
-    async createMessage(_, { messageInput }) {
+    async createMessage(_, { messageInput }, context) {
       if (messageInput.id) {
         throw new UserInputError("New Message cannot have id");
       }
       try {
-        // TODO: replace userId as senderID
+        const res = await validateChat(messageInput.chatID, context.user.id);
+        if (res !== true) {
+          throw new ApolloError(res);
+        }
         const newMessage = new Message({
           ...messageInput,
-          sender: "60067460b53560c199d970d4",
+          sender: context.user.id,
           createdAt: new Date().toISOString()
         });
         let message = await newMessage.save();
-        // TODO: populate sender failed
+        message = await message
+          .populate("sender")
+          .execPopulate();
         return convertMessageDecimalContent(message);
       } catch(err) {
         throw new ApolloError(err.message);
       }
     },
-    async deleteMessage(_, { id }) {
+    async deleteMessage(_, { id }, context) {
       if (!id) {
         throw new UserInputError("Delete Message must have id");
       }
@@ -64,8 +71,13 @@ const MessageResolver = {
         if (message === null) {
           throw new ApolloError("Message is not exist");
         }
-        // TODO: check if senderID is userId
-        // if (message._doc.sender.id === user.id)
+        const res = await validateChat(message.chatID, context.user.id);
+        if (res !== true) {
+          throw new ApolloError(res);
+        }
+        if (message._doc.sender.id !== context.user.id) {
+          throw new ApolloError("Message is not belong to logged in user");
+        }
         await message.delete();
         return "Message Deleted Successfully";
       } catch(err) {
@@ -86,6 +98,19 @@ const convertMessageDecimalContent = (message) => {
     message._doc.video.videoSize = message._doc.video.videoSize.toString();
   }
   return message;
+}
+
+const validateChat = async (conversationId, userId) => {
+  const conversation = await Conversation.findById(conversationId)
+  if (!conversation) {
+    return "Conversation not exist";
+  }
+  const matched = conversation._doc.members.filter(member => member.toString() === userId.toString());
+  if (matched.length < 1) {
+    return "User is not member of chat";
+  } else {
+    return true;
+  }
 }
 
 export default MessageResolver;

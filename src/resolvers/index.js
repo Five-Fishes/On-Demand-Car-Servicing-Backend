@@ -4,6 +4,7 @@ import MessageResolver from "./Message";
 import UserResolver from "./User";
 import PromotionResolver from "./Promotion";
 import DispatchServiceResolver from "./DispatchService";
+import VideoStorageResolver from "./VideoStorage";
 
 export default [
   ImageStorageResolver,
@@ -12,4 +13,5 @@ export default [
   UserResolver,
   PromotionResolver,
   DispatchServiceResolver,
+  VideoStorageResolver,
 ];
