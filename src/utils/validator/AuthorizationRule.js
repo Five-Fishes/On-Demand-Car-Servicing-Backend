@@ -8,10 +8,45 @@ const permissions = shield({
   Query: {
     users: isAuthenticated,
     user: isAuthenticated,
+    // Message
+    getMessages: isAuthenticated,
+    getMessage: isAuthenticated,
+    // Dispatch Service
+    getDispatchServices: isAuthenticated,
+    getDispatchService: isAuthenticated,
+    // Conversation
+    getConversations: isAuthenticated,
+    getConversation: isAuthenticated,
+    // VideoStorage
+    videoStorages: isAuthenticated,
+    videoStorage: isAuthenticated,
   },
   Mutation: {
     updateUser: isAuthenticated,
     deleteUser: isAuthenticated,
+    // Message
+    createMessage: isAuthenticated,
+    deleteMessage: isAuthenticated,
+    // Dispatch Service
+    createDispatchService: isAuthenticated,
+    updateDispatchService: isAuthenticated,
+    // Image Storage
+    createImageStorage: isAuthenticated,
+    updateImageStorage: isAuthenticated,
+    // Conversation
+    createConversation: isAuthenticated,
+    updateConversation: isAuthenticated,
+    // Promotion
+    createPromotion: isAuthenticated,
+    updatePromotion: isAuthenticated,
+    deletePromotion: isAuthenticated,
+    // Service
+    createService: isAuthenticated,
+    updateService: isAuthenticated,
+    deleteService: isAuthenticated,
+    // VideoStorage
+    createVideoStorage: isAuthenticated,
+    updateVideoStorage: isAuthenticated,
   },
 });
 

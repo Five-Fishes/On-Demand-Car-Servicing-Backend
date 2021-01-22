@@ -26,7 +26,7 @@ export default gql`
     image: MessageImage
     audio: MessageAudio
     video: MessageVideo
-    sender: MessageSender
+    sender: MessageSender!
     createdAt: String!
   }
 

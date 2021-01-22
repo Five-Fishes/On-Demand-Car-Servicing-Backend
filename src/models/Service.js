@@ -3,9 +3,10 @@ import mongoose from "mongoose";
 const ServiceSchema = new mongoose.Schema(
   {
     serviceNm: String,
+    serviceType: String,
     isDispatchAvailable: Boolean,
     isInHouseAvailable: Boolean,
-    estimatedServiceTime: String,
+    estimatedServiceTime: mongoose.Decimal128,
   },
   {
     timestamps: true,

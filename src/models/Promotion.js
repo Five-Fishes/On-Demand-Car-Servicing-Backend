@@ -6,11 +6,31 @@ const PromotionSchema = new mongoose.Schema(
     promotionStart: Date,
     promotionEnd: Date,
     promotionDesc: String,
-    ImageID: Number,
-    serviceID: [Number],
-    branchID: [Number],
+    image: {
+      _id: String,
+      imageSize: mongoose.Decimal128,
+      imageURL: String,
+      imageFileNm: String,
+      imageType: String,
+    },
+    promotionService: [
+      {
+        _id: String,
+        serviceNm: String,
+        isDispatchAvailable: Boolean,
+        isInHouseAvailable: Boolean,
+        estimatedServiceTime: mongoose.Decimal128,
+      },
+    ],
+    promotionBranch: [
+      {
+        _id: String,
+        branchAddr: String,
+        branchContactNo: String,
+      },
+    ],
     promoCode: String,
-    discountAm: mongoose.Decimal128,
+    discountAmt: mongoose.Decimal128,
   },
   {
     timestamps: true,

@@ -45,10 +45,10 @@ export default gql`
 
   type DispatchService {
     id: ID!
-    dispatchTimeStamp: String
-    branch: DispacthServiceBranch
+    dispatchTimeStamp: String!
+    branch: DispacthServiceBranch!
     employee: DispatchServiceEmployee
-    customer: DispatchServiceCustomer
+    customer: DispatchServiceCustomer!
     service: DispatchServiceDetails
     vehicle: DispatchServiceVehicle!
     customerLocationDesc: String!
@@ -68,16 +68,16 @@ export default gql`
     firstName: String!
     lastName: String!
     contactNo: String!
-    ip: String!
+    ip: String
     employeeType: String!
-    employmentBranch: ID!
+    employmentBranch: ID
   }
 
   type DispatchServiceCustomer {
     firstName: String!
     lastName: String!
     contactNo: String!
-    ip: String!
+    ip: String
   }
 
   type DispatchServiceVehicle {
