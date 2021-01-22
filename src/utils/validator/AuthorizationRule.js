@@ -8,10 +8,14 @@ const permissions = shield({
   Query: {
     users: isAuthenticated,
     user: isAuthenticated,
+    getMessages: isAuthenticated,
+    getMessage: isAuthenticated,
   },
   Mutation: {
     updateUser: isAuthenticated,
     deleteUser: isAuthenticated,
+    createMessage: isAuthenticated,
+    deleteMessage: isAuthenticated,
   },
 });
 
