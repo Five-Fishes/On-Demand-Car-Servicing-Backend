@@ -1,0 +1,4 @@
+export const CONVERSATION_TYPE = {
+  "PERSONAL": "PERSONAL",
+  "GROUP": "GROUP"
+}
