@@ -1,4 +1,5 @@
 import { ApolloError, UserInputError } from "apollo-server";
+import mongoose from "mongoose";
 
 import { VideoStorage } from "../models";
 
@@ -40,10 +41,38 @@ const VideoStorageResolver = {
 
       return videos;
     },
-    videoStorage: async (root, { id }, context, info) => {},
+    videoStorage: async (root, { id }, context, info) => {
+      /**
+       * - check id validity
+       * - execute search video by id
+       */
+
+      /**
+       * id validity check
+       */
+      if (id === null || mongoose.Types.ObjectId.isValid(id)) {
+        throw new UserInputError("Please check ID provided");
+      }
+
+      /**
+       * search video by id
+       */
+      let video = await VideoStorage.findById(id);
+      if (video === null) {
+        throw new ApolloError("Resource not found", 500);
+      }
+      video = videoSizeConverter(video);
+
+      return video;
+    },
   },
   Mutation: {
-    createVideoStorage: async (root, args, context, info) => {},
+    createVideoStorage: async (
+      root,
+      { videoStorageInput },
+      context,
+      info
+    ) => {},
     updateVideoStorage: async (root, args, context, info) => {},
   },
 };
