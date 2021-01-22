@@ -93,7 +93,45 @@ const VideoStorageResolver = {
 
       return newVideo;
     },
-    updateVideoStorage: async (root, args, context, info) => {},
+    updateVideoStorage: async (root, { videoStorageInput }, context, info) => {
+      /**
+       * - validate id
+       * - check for existing
+       */
+
+      /**
+       * validate id
+       */
+      if (
+        videoStorageInput.id === null ||
+        !mongoose.Types.ObjectId.isValid(videoStorageInput.id)
+      ) {
+        throw new UserInputError("Invalid ID provided");
+      }
+
+      /**
+       * - check for existing
+       */
+      const existingVideo = await VideoStorage.findById(videoStorageInput.id);
+      if (existingVideo === null) {
+        throw new ApolloError(
+          `No video with ID:${videoStorageInput.id} is found`,
+          500
+        );
+      }
+
+      /**
+       * perform update
+       */
+      let updatedVideo = await VideoStorage.findByIdAndUpdate(
+        videoStorageInput.id,
+        videoStorageInput,
+        { new: true }
+      );
+      updatedVideo = videoSizeConverter(updatedVideo);
+
+      return updatedVideo;
+    },
   },
 };
 
