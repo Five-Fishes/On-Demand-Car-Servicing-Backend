@@ -50,7 +50,7 @@ const VideoStorageResolver = {
       /**
        * id validity check
        */
-      if (id === null || mongoose.Types.ObjectId.isValid(id)) {
+      if (id === null || !mongoose.Types.ObjectId.isValid(id)) {
         throw new UserInputError("Please check ID provided");
       }
 
@@ -67,12 +67,32 @@ const VideoStorageResolver = {
     },
   },
   Mutation: {
-    createVideoStorage: async (
-      root,
-      { videoStorageInput },
-      context,
-      info
-    ) => {},
+    createVideoStorage: async (root, { videoStorageInput }, context, info) => {
+      /**
+       * - id must be null
+       * - insert if valid
+       */
+
+      /**
+       * id validity check
+       */
+      if (videoStorageInput.id) {
+        throw new UserInputError("ID must be null to create");
+      }
+
+      /**
+       * insert
+       */
+      let newVideo;
+      try {
+        newVideo = await VideoStorage.create(videoStorageInput);
+      } catch (error) {
+        throw new ApolloError("Failed to insert ");
+      }
+      newVideo = videoSizeConverter(newVideo);
+
+      return newVideo;
+    },
     updateVideoStorage: async (root, args, context, info) => {},
   },
 };
