@@ -6,6 +6,7 @@ import DispatchServiceResolver from "./DispatchService";
 import AppointmentResolver from "./Appointment";
 import AudioStorageResolver from "./AudioStorage";
 import BranchResolver from "./Branch";
+import CompanyResolver from "./Company";
 
 export default [
   ImageStorageResolver,
@@ -16,5 +17,6 @@ export default [
   AppointmentResolver,
   AudioStorageResolver,
   BranchResolver, 
+  CompanyResolver
 ];
 

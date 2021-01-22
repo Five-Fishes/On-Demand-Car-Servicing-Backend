@@ -9,11 +9,11 @@ export default gql`
   extend type Mutation {
     createBranch(branchInput: BranchInput!): Branch!
     updateBranch(branchInput: BranchInput!): Branch!
-    deleteBranch(id: String!): String!
+    deleteBranch(id: String!): Branch!
   }
 
   input BranchInput {
-    id: ID!
+    id: ID
     companyId: String!
     branchAddr: String!
     branchContactNo: String!
@@ -46,7 +46,7 @@ export default gql`
   }
 
   type Branch{
-    id: ID!
+    id: ID
     companyId: String!
     branchAddr: String!
     branchContactNo: String!

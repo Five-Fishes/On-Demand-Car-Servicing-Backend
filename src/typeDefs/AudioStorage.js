@@ -11,14 +11,14 @@ export default gql`
   extend type Mutation {
     createAudioStorage(audioStorageInput: AudioStorageInput!): AudioStorage!
     updateAudioStorage(audioStorageInput: AudioStorageInput!): AudioStorage!
-    deleteAudioStorage(id: String!): String!
+    deleteAudioStorage(id: String!): AudioStorage!
     uploadAudioStorage(audioStorage: Upload!): AudioStorage!
   }
 
   input AudioStorageInput {
-    id: ID!
+    id: ID
     """ audio Content should be Buffer """
-    audioContent: String! 
+    audioContent: [Int!] 
     audioURL: String!
     audioType: String!
     audioLength: Float
@@ -28,9 +28,9 @@ export default gql`
   }
 
   type AudioStorage {
-    id: ID!
+    id: ID
     """ should be Buffer """
-    audioContent: String 
+    audioContent:[Int!] 
     audioURL: String!
     audioType: String!
     audioLength: Float

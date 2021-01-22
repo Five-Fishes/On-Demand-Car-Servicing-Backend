@@ -7,16 +7,25 @@ const BranchResolver = {
       if (!filter){
         throw new UserInputError("No filter provided");
       }
-      const filteredBranchs = await Branch.find(JSON.parse(filter));
+      try {
+        const filteredBranchs = await Branch.find(JSON.parse(filter));
       return filteredBranchs;
+      }catch(err){
+        throw new UserInputError("No branches are found with filter")
+      }
+      
     },
     branch: async (root, { id }, context, info) => {
       const invalid_input = id.length === 0;
       if (invalid_input) {
         throw new UserInputError("Invalid ID number provided");
       }
+      try{
       const branch = await Branch.findById(id);
       return branch;
+      } catch(err){
+        throw new ApolloError(err.message,500)
+      }
     }
   },
   Mutation: {
@@ -46,24 +55,24 @@ const BranchResolver = {
           .populate("services")
           .execPopulate();
       } catch (err) {
-        throw new ApolloError(err.message);
+        throw new ApolloError(err.message,500);
       }
 
     },
     async deleteBranch(_, { id } ) {
       if(!id){
-        throw new UserInputError ("Unable to delete Branch");
+        throw new UserInputError ("No id is provided.");
       }
       try{
-        const branch = Branch.findById(id);
+        const branch = await Branch.findById(id);
         if (branch){
-          Branch.findByIdAndRemove(id, () => {});
-          return "Branch deleted.";
+          const deleted = await Branch.findByIdAndRemove(id);
+          return deleted;
         } else {
           throw new UserInputError ("Branch ID is not found.");
         }
       }catch (err){
-        throw new ApolloError(err.message);
+        throw new ApolloError(err.message,500);
       }
     }
   } ,

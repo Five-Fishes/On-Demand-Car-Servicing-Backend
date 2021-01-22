@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 const AppointmentSchema = new mongoose.Schema(
   {
-    AppointmantDate: Date,
-    CustomerID: Number,
-    BranchID: Number,
-    VehicleID: Number,
-    ServiceID: Number,
+    AppointmentDate: Date,
+    CustomerID: String,
+    BranchID: String,
+    VehicleID: String,
+    ServiceID: String,
     AppointmentStatus: String,
   },
   {

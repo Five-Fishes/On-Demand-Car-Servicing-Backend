@@ -8,8 +8,13 @@ const AudioStorageResolver = {
       if (!filter){
         throw new UserInputError("No filter provided");
       }
-      const filteredAudioStorages =await AudioStorage.find(JSON.parse(filter))
-      return filteredAudioStorages;
+      try{
+        const filteredAudioStorages =await AudioStorage.find(JSON.parse(filter))
+        return filteredAudioStorages;
+      }catch(err){
+        throw new ApolloError(err.message,500)
+      }
+     
     },
     audioStorage: async (root, { id }, context, info) => {
       const invalid_input = id.length === 0;
@@ -37,7 +42,6 @@ const AudioStorageResolver = {
       }
       try{
         return await AudioStorage.findByIdAndUpdate(audioStorageInput.id, {
-          id: audioStorageInput.id,
           audioContent: audioStorageInput.audioContent,
           audioURL: audioStorageInput.audioURL,
           audioType: audioStorageInput.audioType,
@@ -45,7 +49,7 @@ const AudioStorageResolver = {
           AudioStorageStatus: audioStorageInput.AudioStorageStatus
         }, {new: true})
       } catch (err) {
-        throw new ApolloError(err);
+        throw new ApolloError(err.message,500);
       }
 
     },
@@ -62,8 +66,8 @@ const AudioStorageResolver = {
       }
       const audioStorage = AudioStorage.findById(id);
       if (audioStorage){
-        AudioStorage.findByIdAndRemove(id, () => {});
-        return "AudioStorage deleted.";
+        let deleted = await AudioStorage.findByIdAndRemove(id);
+        return deleted;
       } else {
         throw new UserInputError ("AudioStorage ID is not found.");
       }
