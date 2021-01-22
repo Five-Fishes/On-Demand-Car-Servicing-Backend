@@ -3,6 +3,7 @@ import ConversationResolver from "./Conversation";
 import MessageResolver from "./Message";
 import UserResolver from "./User";
 import DispatchServiceResolver from "./DispatchService";
+import VideoStorageResolver from "./VideoStorage";
 
 export default [
   ImageStorageResolver,
@@ -10,4 +11,5 @@ export default [
   ConversationResolver,
   UserResolver,
   DispatchServiceResolver,
+  VideoStorageResolver,
 ];
