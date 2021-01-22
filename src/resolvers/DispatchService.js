@@ -6,6 +6,11 @@ import User from "../models/User";
 import Branch from "../models/Branch";
 import Service from "../models/Service";
 
+const convertEstimatedServiceTime = (dispatchService) => {
+  dispatchService._doc.service._doc.estimatedServiceTime = dispatchService._doc.service._doc.estimatedServiceTime.toString();
+  return dispatchService;
+}
+
 const validateUpdateStatus = (originalDispatchService, user, updatingStatus) => {
   
   if (originalDispatchService.status === DISPATCH_SERVICE_STATUS.COMPLETED) {
@@ -90,6 +95,7 @@ const DispatchServiceResolver = {
           .populate("employee")
           .populate("service")
           .populate("branch");
+        dispatchServices.map(data => convertEstimatedServiceTime(data));
         return dispatchServices;
       } catch(err) {
         throw new ApolloError(err.message);
@@ -103,7 +109,7 @@ const DispatchServiceResolver = {
           .populate("employee")
           .populate("service")
           .populate("branch");
-        return dispatchService;
+        return convertEstimatedServiceTime(dispatchService);
       } catch(err) {
         throw new ApolloError(err.message);
       }
@@ -136,13 +142,13 @@ const DispatchServiceResolver = {
           createdAt: new Date().toISOString()
         });
         let dispatchService = await newDispatchService.save();
-        dispatchService = dispatchService
+        dispatchService = await dispatchService
           .populate("customer")
           .populate("employee")
           .populate("service")
           .populate("branch")
           .execPopulate();
-        return dispatchService;
+        return convertEstimatedServiceTime(dispatchService);
       } catch(err) {
         throw new ApolloError(err.message);
       }
@@ -176,13 +182,13 @@ const DispatchServiceResolver = {
           branch: originalDispatchService.branch,
           service: originalDispatchService.service
         }, {new: true});
-        dispatchService = dispatchService
+        dispatchService = await dispatchService
           .populate("customer")
           .populate("employee")
           .populate("service")
           .populate("branch")
           .execPopulate();
-        return dispatchService;
+        return convertEstimatedServiceTime(dispatchService);
       } catch(err) {
         throw new ApolloError(err.message);
       }
