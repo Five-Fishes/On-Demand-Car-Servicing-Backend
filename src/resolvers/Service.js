@@ -176,23 +176,22 @@ const ServiceResolver = {
 
       /**
        * destructure current user
+       * only allow system admin to modify
        */
-      const { type, employeeType } = context.user;
+      const { type } = context.user;
+      const isAdmin =
+        type !== USER_TYPE.BRANDOWNER &&
+        type !== USER_TYPE.CUSTOMER &&
+        type !== USER_TYPE.EMPLOYEE;
+      if (!isAdmin) {
+        throw new ApolloError("User do not have access right to delete", 500);
+      }
 
       /**
        * must have ID
        */
       if (id === null) {
         throw UserInputError("No ID provided to delete");
-      }
-
-      /**
-       * only brand owner for deletion
-       */
-      if (roleValidator(type, employeeType)) {
-        if (type === USER_TYPE.EMPLOYEE) {
-          throw new ApolloError("User do not have enough access right", 500);
-        }
       }
 
       /**
