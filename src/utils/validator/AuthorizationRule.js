@@ -11,6 +11,9 @@ const permissions = shield({
     // Message
     getMessages: isAuthenticated,
     getMessage: isAuthenticated,
+    // Dispatch Service
+    getDispatchServices: isAuthenticated,
+    getDispatchService: isAuthenticated,
     // Conversation
     getConversations: isAuthenticated,
     getConversation: isAuthenticated,
@@ -24,6 +27,9 @@ const permissions = shield({
     // Message
     createMessage: isAuthenticated,
     deleteMessage: isAuthenticated,
+    // Dispatch Service
+    createDispatchService: isAuthenticated,
+    updateDispatchService: isAuthenticated,
     // Image Storage
     createImageStorage: isAuthenticated,
     updateImageStorage: isAuthenticated,
