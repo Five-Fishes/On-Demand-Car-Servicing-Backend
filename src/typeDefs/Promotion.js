@@ -18,10 +18,10 @@ export default gql`
     promotionStart: String!
     promotionEnd: String!
     image: ImageStorage!
-    serivces: [PromotionService!]!
-    branches: [PromotionBranch!]!
+    promotionService: [PromotionService!]!
+    promotionBranch: [PromotionBranch!]!
     promoCode: String!
-    discountAm: Float!
+    discountAmt: Float!
   }
 
   type PromotionBranch {
@@ -53,14 +53,14 @@ export default gql`
   }
 
   input PromotionInput {
-    id: ID!
+    id: ID
     promotionNm: String!
     promotionStart: String!
     promotionEnd: String!
     image: ImageStorageInput!
-    serivces: [PromotionServiceInput!]!
-    branches: [PromotionBranchInput!]!
+    promotionService: [PromotionServiceInput!]!
+    promotionBranch: [PromotionBranchInput!]!
     promoCode: String!
-    discountAm: Float!
+    discountAmt: Float!
   }
 `;

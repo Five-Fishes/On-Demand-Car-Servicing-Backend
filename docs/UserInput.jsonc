@@ -1,0 +1,16 @@
+{
+  "userInput": {
+    "id": null,
+    "type": "BRANDOWNER",
+    "firstName": "ROOT",
+    "lastName": "USER",
+    "password": "12345",
+    "dateOfBirth": "898531200000",
+    "contactNo": "+60143360623",
+    "email": "root@temp.com",
+    "ip": null,
+    "vehicle": null,
+    "employeeType": "NONE",
+    "favouriteBranch": null
+  }
+}
