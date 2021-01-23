@@ -7,12 +7,13 @@ import mongoose from "mongoose";
 
 import { Promotion } from "../models";
 import { USER_TYPE } from "../constants";
+import { estimatedServiceTimeConverter } from "../utils/converter";
 
 const promotionConverter = (promotion) => {
   let payload = discountAmtConverter(promotion._doc);
   payload.image = imageSizeConverter(promotion._doc.image);
   promotion.promotionService.map((promotionService) => {
-    estimatedServiceTimeConverter(promotionService._doc);
+    estimatedServiceTimeConverter(promotionService);
   });
   payload.promotionService = promotion.promotionService;
   return payload;
@@ -30,15 +31,6 @@ const imageSizeConverter = (imageStorage) => {
     console.error(error);
   }
   return imageStorage;
-};
-
-const estimatedServiceTimeConverter = (PromotionService) => {
-  try {
-    PromotionService.estimatedServiceTime = PromotionService.estimatedServiceTime.toString();
-  } catch (error) {
-    console.error(error);
-  }
-  return PromotionService;
 };
 
 //TODO: #60 @LUXIANZE Add auth check before appropriate query and mutations
