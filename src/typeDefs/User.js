@@ -66,6 +66,7 @@ export default gql`
   }
 
   type Vehicle {
+    id: String!
     vehicleType: String!
     vehicleBrand: String!
     vehicleModel: String!

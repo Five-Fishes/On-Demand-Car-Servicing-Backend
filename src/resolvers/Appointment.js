@@ -1,8 +1,44 @@
 import { ApolloError, UserInputError } from "apollo-server-express";
+import mongoose from "mongoose";
 
 import { Appointment, User, Branch, Service } from "../models";
-import { APPOINTMENT_STATUS } from "../constants";
+import {
+  APPOINTMENT_STATUS,
+  USER_TYPE,
+  NO_ACCESS_RIGHT_CODE,
+} from "../constants";
 import { FFInvalidFilterError } from "../utils/error";
+
+/**
+ * Validate the appointment to create, considering fields validity of:
+ * - appointmentdate
+ * - customerID
+ * - branchID
+ * - serviceID
+ * - vehicleID
+ * - serviceID
+ * @param {Object} appointmentInput
+ * @param {Object} user
+ */
+const appointmentValidator = async (appointmentInput, user) => {
+  // validate the appointment date
+  const validDate = new Date(appointmentInput.appointmentDate) > Date.now();
+  // validate current customer creates an appointment
+  const validCustomer = appointmentInput.customerID === user.id;
+  // validate the branch
+  const validBranch = await Branch.findById(appointmentInput.branchID);
+  // validate vehicle
+  const customer = await User.findById(user.id);
+  const validVehicle = customer.vehicle.find(
+    (vehicle) => vehicle._id.toString() === appointmentInput.vehicleID
+  );
+  // validate the service
+  const validService = await Service.findById(appointmentInput.serviceID);
+
+  return (
+    validDate && validCustomer && validBranch && validVehicle && validService
+  );
+};
 
 const AppointmentResolver = {
   Query: {
@@ -34,19 +70,58 @@ const AppointmentResolver = {
       }
     },
     appointment: async (root, { id }, context, info) => {
-      const invalid_input = id.length === 0;
+      /**
+       * validate id length
+       * validate id format
+       */
+      const invalid_input =
+        id.length === 0 || mongoose.Types.ObjectId.isValid(id);
       if (invalid_input) {
         return new UserInputError("Invalid ID number provided");
       }
+
+      /**
+       * find by id
+       */
       const appointment = await Appointment.findById(id);
       return appointment;
     },
   },
   Mutation: {
-    async createAppointment(_, { appointmentInput }) {
+    async createAppointment(_, { appointmentInput }, context) {
+      /**
+       * destructuring context to get user
+       */
+      const { user } = context;
+
+      /**
+       * only customer can create appointment
+       */
+      const hasAccessRight = user.type === USER_TYPE.CUSTOMER;
+      if (!hasAccessRight)
+        return new ApolloError(
+          `User type ${user.type} cannot create appointment`,
+          NO_ACCESS_RIGHT_CODE
+        );
+
+      /**
+       * check validity for:
+       * - input
+       * - date
+       * - customer
+       * - branch
+       * - service
+       */
       if (appointmentInput === null) {
         return new ApolloError("Invalid input for new Appointment");
       }
+      const validInput = await appointmentValidator(appointmentInput, user);
+      if (!validInput) {
+        return new UserInputError("Invalid input fileds for appoinetment", {
+          details: appointmentInput,
+        });
+      }
+
       const appointment = await Appointment.create({ ...appointmentInput });
       return appointment;
     },
