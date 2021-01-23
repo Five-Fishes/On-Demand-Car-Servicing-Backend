@@ -2,6 +2,7 @@ import { ApolloError, UserInputError } from "apollo-server-express";
 
 import { Appointment, User, Branch, Service } from "../models";
 import { APPOINTMENT_STATUS } from "../constants";
+import { FFInvalidFilterError } from "../utils/error";
 
 const AppointmentResolver = {
   Query: {
@@ -9,8 +10,24 @@ const AppointmentResolver = {
       if (!filter) {
         return new UserInputError("No filter provided");
       }
+
+      /**
+       * parse filter string to json
+       */
       try {
-        const filteredAppointments = await Appointment.find(JSON.parse(filter));
+        filter = JSON.parse(filter);
+      } catch (error) {
+        return new FFInvalidFilterError(
+          error.message,
+          `Filter: ${filter} is invalid`
+        );
+      }
+
+      /**
+       * query db with filter
+       */
+      try {
+        const filteredAppointments = await Appointment.find(filter);
         return filteredAppointments;
       } catch (err) {
         return new ApolloError(err.message, 500);

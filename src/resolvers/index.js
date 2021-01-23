@@ -20,9 +20,8 @@ export default [
   DispatchServiceResolver,
   AppointmentResolver,
   AudioStorageResolver,
-  BranchResolver, 
-  CompanyResolver
+  BranchResolver,
+  CompanyResolver,
   ServiceResolver,
   VideoStorageResolver,
 ];
-

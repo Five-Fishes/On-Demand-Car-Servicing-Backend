@@ -14,12 +14,12 @@ export default gql`
 
   input AppointmentInput {
     id: ID
-    AppointmentDate: String!
-    CustomerID: String!
-    BranchID: String!
-    VehicleID: String!
-    ServiceID: String!
-    AppointmentStatus: AppointmentStatus!
+    appointmentDate: String!
+    customerID: String!
+    branchID: String!
+    vehicleID: String!
+    serviceID: String!
+    appointmentStatus: AppointmentStatus!
   }
 
   enum AppointmentStatus {
@@ -31,13 +31,12 @@ export default gql`
   }
 
   type Appointment {
-    id: ID
-    AppointmentDate: String!
-    CustomerID: String!
-    BranchID: String!
-    VehicleID: String!
-    ServiceID: String!
-    AppointmentStatus: AppointmentStatus!
+    id: ID!
+    appointmentDate: String!
+    customerID: String!
+    branchID: String!
+    vehicleID: String!
+    serviceID: String!
+    appointmentStatus: AppointmentStatus!
   }
-
 `;
