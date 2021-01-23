@@ -1,81 +1,168 @@
 import { ApolloError, UserInputError } from "apollo-server-express";
-import AudioStorage from "../models/AudioStorage";
+import mongoose, { mongo } from "mongoose";
+
+import { AudioStorage } from "../models";
+import { FFInvalidFilterError } from "../utils/error";
+
+/**
+ * format the Decimal128 tyoe to graphql float compliance pattern
+ * @param {Object} audioStorageInput
+ */
+const audioLengthConverter = (audioStorageInput) => {
+  audioStorageInput._doc.audioLength = audioStorageInput._doc.audioLength.toString();
+  return audioStorageInput;
+};
 
 const AudioStorageResolver = {
   Query: {
-    audioUploads: (_, args) => {},
     audioStorages: async (root, { filter }, context, info) => {
-      if (!filter) {
+      /**
+       * - validate filter
+       * - query by filter
+       */
+      if (filter == null) {
         return new UserInputError("No filter provided");
       }
+
+      /**
+       * try parse filter
+       */
       try {
-        const filteredAudioStorages = await AudioStorage.find(
-          JSON.parse(filter)
+        filter = JSON.parse(filter);
+      } catch (error) {
+        return new FFInvalidFilterError(
+          `${error.message}, filter provided: ${filter}`,
+          { Details: error }
         );
-        return filteredAudioStorages;
+      }
+
+      /**
+       * perform serach by filter
+       */
+      try {
+        const filteredAudioStorages = await AudioStorage.find(filter);
+        const formattedAudioStorages = filteredAudioStorages.map(
+          (audioStorage) => audioLengthConverter(audioStorage)
+        );
+
+        return formattedAudioStorages;
       } catch (err) {
         return new ApolloError(err.message, 500);
       }
     },
     audioStorage: async (root, { id }, context, info) => {
-      const invalid_input = id.length === 0;
-      if (invalid_input) {
+      /**
+       * - validate id
+       * - perform search
+       */
+      const invalidInput =
+        id.length === 0 || !mongoose.Types.ObjectId.isValid(id);
+      if (invalidInput) {
         return new UserInputError("Invalid ID number provided");
       }
-      const audioStorage = await AudioStorage.findById(id);
-      return audioStorage;
+
+      try {
+        const audioStorage = await AudioStorage.findById(id);
+        return audioLengthConverter(audioStorage);
+      } catch (error) {
+        return new ApolloError(
+          `Error while trying to search for ID: ${id}`,
+          500,
+          { Details: error }
+        );
+      }
     },
   },
   Mutation: {
-    async createAudioStorage(_, { audioStorageInput }) {
+    createAudioStorage: async (root, { audioStorageInput }) => {
+      /**
+       * - validate length
+       * - create new
+       */
+
       if (audioStorageInput === null) {
         return new ApolloError("Invalid input for new AudioStorage");
       }
-      const newAudioStorage = new AudioStorage({
-        ...audioStorageInput,
-      });
-      const audioStorage = await newAudioStorage.save();
-      return audioStorage;
-    },
-    async updateAudioStorage(_, { audioStorageInput }) {
-      if (audioStorageInput.id === null) {
+
+      /**
+       * validate length
+       */
+      const isValidLength = audioStorageInput.audioLength >= 0;
+      if (!isValidLength) {
         return new UserInputError(
-          "Unable to update AudioStorage with invalid id"
+          `Invalid audiolength ${audioStorageInput.audioLength}, length must be >= 0`
         );
       }
+
+      /**
+       * create new audio storage
+       */
       try {
-        return await AudioStorage.findByIdAndUpdate(
+        const newAudioStorage = await AudioStorage.create(audioStorageInput);
+        return audioLengthConverter(newAudioStorage);
+      } catch (error) {
+        return new ApolloError(`Error while creating: ${error.message}`, 500, {
+          Details: error,
+        });
+      }
+    },
+    updateAudioStorage: async (root, { audioStorageInput }) => {
+      /**
+       * - validate length
+       * - update by id
+       */
+
+      if (audioStorageInput === null) {
+        return new ApolloError("Invalid input for new AudioStorage");
+      }
+
+      /**
+       * validate length
+       */
+      const isValidLength = audioStorageInput.audioLength >= 0;
+      if (!isValidLength) {
+        return new UserInputError(
+          `Invalid audiolength ${audioStorageInput.audioLength}, length must be >= 0`
+        );
+      }
+
+      /**
+       * create new audio storage
+       */
+      try {
+        const updatedAudioStorage = await AudioStorage.findByIdAndUpdate(
           audioStorageInput.id,
-          {
-            audioContent: audioStorageInput.audioContent,
-            audioURL: audioStorageInput.audioURL,
-            audioType: audioStorageInput.audioType,
-            audioLength: audioStorageInput.audioLength,
-            AudioStorageStatus: audioStorageInput.AudioStorageStatus,
-          },
+          audioStorageInput,
           { new: true }
         );
-      } catch (err) {
-        return new ApolloError(err.message, 500);
+        return audioLengthConverter(updatedAudioStorage);
+      } catch (error) {
+        return new ApolloError(`Error while updating: ${error.message}`, 500, {
+          Details: error,
+        });
       }
     },
-    uploadAudioStorage: (_, args) => {
-      return args.file.then((file) => {
-        //Contents of Upload scalar: https://github.com/jaydenseric/graphql-upload#class-graphqlupload
-        //file.createReadStream() is a readable node stream that contains the contents of the uploaded file
-        return file;
-      });
-    },
-    async deleteAudioStorage(_, { id }) {
-      if (!id) {
-        return new UserInputError("Unable to delete AudioStorage");
+    deleteAudioStorage: async (root, { id }) => {
+      /**
+       * - validate id
+       * - delete
+       */
+      const invalidInput =
+        id.length === 0 || !mongoose.Types.ObjectId.isValid(id);
+      if (invalidInput) {
+        return new UserInputError("Invalid ID number provided");
       }
-      const audioStorage = AudioStorage.findById(id);
-      if (audioStorage) {
-        let deleted = await AudioStorage.findByIdAndRemove(id);
-        return deleted;
-      } else {
-        return new UserInputError("AudioStorage ID is not found.");
+
+      /**
+       * delete
+       */
+      try {
+        const deletedAudioStorage = await AudioStorage.findByIdAndDelete(id);
+        return audioLengthConverter(deletedAudioStorage);
+      } catch (error) {
+        return new ApolloError(`Error while deleting ${error.message}`, 500, {
+          Details: error,
+        });
       }
     },
   },
