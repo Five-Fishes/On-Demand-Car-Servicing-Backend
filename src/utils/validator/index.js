@@ -4,3 +4,4 @@ export {
   validateRole as validateRole,
 } from "./UserInputValidator";
 export { default as permissions } from "./AuthorizationRule";
+export { createAppointmentValidator } from "./AppointmentInputValidator";

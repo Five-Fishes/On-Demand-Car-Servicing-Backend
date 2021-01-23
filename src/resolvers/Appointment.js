@@ -2,43 +2,13 @@ import { ApolloError, UserInputError } from "apollo-server-express";
 import mongoose from "mongoose";
 
 import { Appointment, User, Branch, Service } from "../models";
+import { FFInvalidFilterError } from "../utils/error";
+import { createAppointmentValidator } from "../utils/validator";
 import {
   APPOINTMENT_STATUS,
   USER_TYPE,
   NO_ACCESS_RIGHT_CODE,
 } from "../constants";
-import { FFInvalidFilterError } from "../utils/error";
-
-/**
- * Validate the appointment to create, considering fields validity of:
- * - appointmentdate
- * - customerID
- * - branchID
- * - serviceID
- * - vehicleID
- * - serviceID
- * @param {Object} appointmentInput
- * @param {Object} user
- */
-const appointmentValidator = async (appointmentInput, user) => {
-  // validate the appointment date
-  const validDate = new Date(appointmentInput.appointmentDate) > Date.now();
-  // validate current customer creates an appointment
-  const validCustomer = appointmentInput.customerID === user.id;
-  // validate the branch
-  const validBranch = await Branch.findById(appointmentInput.branchID);
-  // validate vehicle
-  const customer = await User.findById(user.id);
-  const validVehicle = customer.vehicle.find(
-    (vehicle) => vehicle._id.toString() === appointmentInput.vehicleID
-  );
-  // validate the service
-  const validService = await Service.findById(appointmentInput.serviceID);
-
-  return (
-    validDate && validCustomer && validBranch && validVehicle && validService
-  );
-};
 
 const AppointmentResolver = {
   Query: {
@@ -115,14 +85,22 @@ const AppointmentResolver = {
       if (appointmentInput === null) {
         return new ApolloError("Invalid input for new Appointment");
       }
-      const validInput = await appointmentValidator(appointmentInput, user);
-      if (!validInput) {
-        return new UserInputError("Invalid input fileds for appoinetment", {
-          details: appointmentInput,
-        });
+      const validInput = await createAppointmentValidator(
+        appointmentInput,
+        user
+      );
+      if (validInput !== true) {
+        return validInput === false
+          ? new UserInputError("Please check Date/Vehicle input", {
+              Details: appointmentInput,
+            })
+          : validInput;
       }
 
-      const appointment = await Appointment.create({ ...appointmentInput });
+      /**
+       * after passing validity check, create appointment
+       */
+      const appointment = await Appointment.create(appointmentInput);
       return appointment;
     },
     async updateAppointment(_, { appointmentInput }) {
