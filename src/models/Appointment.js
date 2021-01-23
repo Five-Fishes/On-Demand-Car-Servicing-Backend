@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 const AppointmentSchema = new mongoose.Schema(
   {
-    AppointmentDate: Date,
-    CustomerID: String,
-    BranchID: String,
-    VehicleID: String,
-    ServiceID: String,
-    AppointmentStatus: String,
+    appointmentDate: String,
+    customerID: String,
+    branchID: String,
+    vehicleID: String,
+    serviceID: String,
+    appointmentStatus: String,
   },
   {
     timestamps: true,
