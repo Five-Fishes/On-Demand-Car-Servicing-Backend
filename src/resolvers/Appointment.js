@@ -3,10 +3,7 @@ import mongoose from "mongoose";
 
 import { Appointment, User, Branch } from "../models";
 import { FFInvalidFilterError } from "../utils/error";
-import {
-  appointmentInputValidator,
-  creatorValidator,
-} from "../utils/validator";
+import { appointmentInputValidator, roleValidator } from "../utils/validator";
 import {
   APPOINTMENT_STATUS,
   USER_TYPE,
@@ -228,10 +225,7 @@ const AppointmentResolver = {
         );
       }
 
-      const isCreator = creatorValidator(
-        originalAppointment.customerID,
-        user.id
-      );
+      const isCreator = roleValidator(originalAppointment.customerID, user.id);
       if (!isCreator) {
         return UserInputError(
           "User cannot delete because this appointment is created by another user"

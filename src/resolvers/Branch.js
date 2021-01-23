@@ -2,7 +2,7 @@ import { ApolloError, UserInputError } from "apollo-server-express";
 import mongoose from "mongoose";
 
 import { Branch, Service, Company } from "../models";
-import { USER_TYPE, NO_ACCESS_RIGHT_CODE } from "../constants";
+import { USER_TYPE, NO_ACCESS_RIGHT_CODE, EMPLOYEE_TYPE } from "../constants";
 import { FFInvalidFilterError } from "../utils/error";
 import { servicesValidator } from "../utils/validator";
 import { estimatedServiceTimeConverter } from "../utils/converter";
@@ -166,7 +166,7 @@ const BranchResolver = {
     },
     updateBranch: async (root, { branchInput }, context, info) => {
       /**
-       * - only allow brand owner:
+       * - only allow brand owner and manager:
        *  - check if company's owner === user.id
        * - validate input
        */
@@ -176,8 +176,10 @@ const BranchResolver = {
        */
       const { user } = context;
 
-      const isOwnerAccess = user.type === USER_TYPE.BRANDOWNER;
-      if (!isOwnerAccess) {
+      const allowAccess =
+        user.type === USER_TYPE.BRANDOWNER ||
+        user.employeeType === EMPLOYEE_TYPE.MANAGER;
+      if (!allowAccess) {
         throw new ApolloError(
           `User type ${user.type} cannot perform this action`,
           NO_ACCESS_RIGHT_CODE

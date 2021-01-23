@@ -6,6 +6,6 @@ export {
 export { default as permissions } from "./AuthorizationRule";
 export {
   appointmentInputValidator as appointmentInputValidator,
-  creatorValidator as creatorValidator,
+  roleValidator as roleValidator,
 } from "./AppointmentInputValidator";
 export { servicesValidator as servicesValidator } from "./BranchInputValidator";
