@@ -1,22 +1,53 @@
 import { ApolloError, UserInputError } from "apollo-server-express";
-import Company from "../models/Company";
-import User from "../models/User";
+import mongoose from "mongoose";
+
+import { User, Company } from "../models";
+import { FFInvalidFilterError } from "../utils/error";
 
 const CompanyResolver = {
   Query: {
     companies: async (root, { filter }, context, info) => {
-      if (!filter) {
+      /**
+       * - validate filter
+       * - try parse filter
+       * - search by filter
+       */
+      if (filter == null) {
         return new UserInputError("No filter provided");
       }
+
+      /**
+       * try parse
+       */
       try {
-        const filteredCompanies = await Company.find(JSON.parse(filter));
+        filter = JSON.parse(filter);
+      } catch (error) {
+        return new FFInvalidFilterError(
+          `Filter provided: ${filter}, is invalid`,
+          { Details: error }
+        );
+      }
+
+      /**
+       * find with filter
+       */
+      try {
+        const filteredCompanies = await Company.find(filter);
         return filteredCompanies;
       } catch (err) {
-        return new ApolloError(err.message, 500);
+        return new ApolloError(
+          `Error while searching with filter ${filter}`,
+          500,
+          { Details: err }
+        );
       }
     },
     company: async (root, { id }, context, info) => {
-      const invalid_input = id.length === 0;
+      /**
+       * - validate id
+       * - search by id
+       */
+      const invalid_input = !mongoose.Types.ObjectId.isValid(id);
       if (invalid_input) {
         return new UserInputError("Invalid ID number provided");
       }
@@ -24,12 +55,14 @@ const CompanyResolver = {
         const company = await Company.findById(id);
         return company;
       } catch (err) {
-        return new ApolloError(err.message, 500);
+        return new ApolloError(`Company with ID: ${id} not found!`, 500, {
+          Details: err,
+        });
       }
     },
   },
   Mutation: {
-    async createCompany(_, { companyInput }) {
+    createCompany: async (root, { companyInput }, context, info) => {
       if (companyInput === null) {
         return new ApolloError("Invalid input for new Company");
       }
@@ -41,7 +74,7 @@ const CompanyResolver = {
         return new UserInputError("Owner is not a registered as user.");
       }
     },
-    async updateCompany(_, { companyInput }) {
+    updateCompany: async (root, { companyInput }, context, info) => {
       if (!companyInput.id) {
         return new UserInputError("Unable to update Company with invalid id");
       }
@@ -67,7 +100,7 @@ const CompanyResolver = {
         return new ApolloError(err.message, 500);
       }
     },
-    async deleteCompany(_, { id }) {
+    deleteCompany: async (root, { id }, context, info) => {
       if (!id) {
         return new UserInputError("Invalid ID unable to delete Company");
       }

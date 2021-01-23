@@ -20,10 +20,9 @@ export default gql`
   }
 
   type Company {
-    id: ID
+    id: ID!
     companyNm: String!
     companyAddr: String!
     ownerID: String!
   }
-
 `;
