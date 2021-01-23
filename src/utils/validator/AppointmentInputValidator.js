@@ -1,4 +1,5 @@
 import { UserInputError } from "apollo-server-express";
+import { USER_TYPE } from "../../constants";
 
 import { User, Service, Branch } from "../../models";
 
@@ -18,7 +19,7 @@ export const appointmentInputValidator = async (appointmentInput, user) => {
   const validDate = new Date(appointmentInput.appointmentDate) > Date.now();
 
   // validate current customer creates an appointment
-  const validCustomer = creatorValidator(appointmentInput.customerID, user.id);
+  const validRole = roleValidator(appointmentInput.customerID, user);
 
   // validate the branch
   let validBranch = false;
@@ -48,19 +49,18 @@ export const appointmentInputValidator = async (appointmentInput, user) => {
   }
 
   return (
-    validDate &&
-    validCustomer &&
-    !!validBranch &&
-    validVehicle &&
-    !!validService
+    validDate && validRole && !!validBranch && validVehicle && !!validService
   );
 };
 
 /**
- * validate is the user same as the person who creates this appointment
+ * - validate is the user same as the person who creates this appointment
+ * - or is manager/staff
  * @param {String} currentId
- * @param {String} userId
+ * @param {Object} userId
  */
-export const creatorValidator = (currentId, userId) => {
-  return currentId === userId;
+export const roleValidator = (currentId, user) => {
+  const isCustomer = currentId === user.id;
+  const isStaffOrManager = user.type === USER_TYPE.EMPLOYEE;
+  return isCustomer || isStaffOrManager;
 };

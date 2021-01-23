@@ -73,6 +73,8 @@ const CompanyResolver = {
         return new ApolloError("ID should be null while creating company");
       }
 
+      const { user } = context;
+
       /**
        * validate company name
        */
@@ -97,22 +99,12 @@ const CompanyResolver = {
       /**
        * validate owner ID
        */
-      try {
-        const owner = await User.findById(companyInput.ownerID);
-        if (owner === null) {
-          return new ApolloError(
-            `Error validating owner with ID: ${companyInput.ownerID}`,
-            500
-          );
-        }
-        if (owner.type !== USER_TYPE.BRANDOWNER) {
-          return new ApolloError(
-            `Only User type ${USER_TYPE.BRANDOWNER} can create company`
-          );
-        }
-      } catch (error) {
+      const isValidOwner =
+        user.type === USER_TYPE.BRANDOWNER && companyInput.ownerID === user.id;
+      if (!isValidOwner) {
         return new ApolloError(
-          `Error validating owner ID: ${companyInput.ownerID}`
+          `Error validating owner with ID: ${companyInput.ownerID}`,
+          500
         );
       }
 
