@@ -81,7 +81,9 @@ const BranchResolver = {
         const formattedBranch = await branchConverter(branch);
         return formattedBranch;
       } catch (err) {
-        return new ApolloError(err.message, 500);
+        return new ApolloError(`Error finding branch with ID: ${id}`, 500, {
+          Details: err,
+        });
       }
     },
   },
@@ -115,7 +117,7 @@ const BranchResolver = {
           return new ApolloError("Only owner can create branch");
         }
       } catch (error) {
-        new ApolloError(
+        return new ApolloError(
           `Error while looking for company with ID: ${branchInput.companyId}`,
           500,
           { Details: error }
@@ -163,41 +165,140 @@ const BranchResolver = {
       }
     },
     updateBranch: async (root, { branchInput }, context, info) => {
-      if (!branchInput.id) {
-        return new UserInputError("Unable to update Branch with invalid id");
+      /**
+       * - only allow brand owner:
+       *  - check if company's owner === user.id
+       * - validate input
+       */
+
+      /**
+       * destructure user
+       */
+      const { user } = context;
+
+      const isOwnerAccess = user.type === USER_TYPE.BRANDOWNER;
+      if (!isOwnerAccess) {
+        throw new ApolloError(
+          `User type ${user.type} cannot perform this action`,
+          NO_ACCESS_RIGHT_CODE
+        );
       }
+
+      /**
+       * validate is the company own by this user
+       */
       try {
-        let branch = await Branch.findByIdAndUpdate(
+        const company = await Company.findById(branchInput.companyId);
+        if (company.ownerID !== user.id) {
+          return new ApolloError("Only owner can update branch");
+        }
+      } catch (error) {
+        return new ApolloError(
+          `Error while looking for company with ID: ${branchInput.companyId}`,
+          500,
+          { Details: error }
+        );
+      }
+
+      /**
+       * validate:
+       * - service are all valid
+       */
+      try {
+        const [isAllValid, errors] = await servicesValidator(
+          branchInput.services
+        );
+        if (!isAllValid) {
+          return new ApolloError(`Invalid ID(s): ${errors.toString()}`, 500, {
+            Details: errors,
+          });
+        }
+      } catch (error) {
+        return new ApolloError(
+          `Error validating services, ID: ${branchInput.id}`,
+          500,
+          { Details: error, Input: branchInput.services }
+        );
+      }
+
+      /**
+       * update Branch
+       */
+      try {
+        const updatedBranch = await Branch.findByIdAndUpdate(
           branchInput.id,
-          {
-            ...branchInput,
-          },
+          branchInput,
           { new: true }
-        ).then((res) => {
-          return res;
-        });
-        return branch
-          .populate("businesshours")
-          .populate("services")
-          .execPopulate();
-      } catch (err) {
-        return new ApolloError(err.message, 500);
+        );
+        const processedPayload = await branchConverter(updatedBranch);
+
+        return processedPayload;
+      } catch (error) {
+        return new ApolloError(
+          `Error while updating branch, ID: ${branchInput.id}`,
+          500,
+          { Details: error }
+        );
       }
     },
     deleteBranch: async (root, { id }, context, info) => {
-      if (!id) {
-        return new UserInputError("No id is provided.");
+      /**
+       * - validate input
+       * - only allow brand owner:
+       *  - check if company's owner === user.id
+       */
+
+      /**
+       * validate id
+       */
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return new UserInputError(`Invalid ID: ${id}`);
       }
+
+      /**
+       * destructure user
+       */
+      const { user } = context;
+
+      const isOwnerAccess = user.type === USER_TYPE.BRANDOWNER;
+      if (!isOwnerAccess) {
+        throw new ApolloError(
+          `User type ${user.type} cannot perform this action`,
+          NO_ACCESS_RIGHT_CODE
+        );
+      }
+
+      /**
+       * validate is the company own by this user
+       * - get branch
+       * - get company
+       * -compare
+       */
       try {
         const branch = await Branch.findById(id);
-        if (branch) {
-          const deleted = await Branch.findByIdAndRemove(id);
-          return deleted;
-        } else {
-          return new UserInputError("Branch ID is not found.");
+        const company = await Company.findById(branch.companyId);
+        if (company.ownerID !== user.id) {
+          return new ApolloError("Only owner can delete branch");
         }
-      } catch (err) {
-        return new ApolloError(err.message, 500);
+      } catch (error) {
+        return new ApolloError(
+          `Error while looking for company with ID: ${id}`,
+          500,
+          {
+            Details: error,
+          }
+        );
+      }
+
+      /**
+       * delete branch
+       */
+      try {
+        const deletedBranch = await Branch.findByIdAndDelete(id);
+        const formattedBranch = await branchConverter(deletedBranch);
+        return formattedBranch;
+      } catch (error) {
+        return ApolloError(`Error while deleting branch, ID: ${id}`);
       }
     },
   },
