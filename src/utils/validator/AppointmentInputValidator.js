@@ -1,3 +1,5 @@
+import { UserInputError } from "apollo-server-express";
+
 import { User, Service, Branch } from "../../models";
 
 /**
@@ -11,11 +13,13 @@ import { User, Service, Branch } from "../../models";
  * @param {Object} appointmentInput
  * @param {Object} user
  */
-export const createAppointmentValidator = async (appointmentInput, user) => {
+export const appointmentInputValidator = async (appointmentInput, user) => {
   // validate the appointment date
   const validDate = new Date(appointmentInput.appointmentDate) > Date.now();
+
   // validate current customer creates an appointment
-  const validCustomer = appointmentInput.customerID === user.id;
+  const validCustomer = creatorValidator(appointmentInput.customerID, user.id);
+
   // validate the branch
   let validBranch = false;
   try {
@@ -25,12 +29,14 @@ export const createAppointmentValidator = async (appointmentInput, user) => {
       Details: `Invalid Branch ID ${appointmentInput.branchID}`,
     });
   }
+
   // validate vehicle
   const customer = await User.findById(user.id);
   const validVehicle =
     customer.vehicle.find(
       (vehicle) => vehicle._id.toString() === appointmentInput.vehicleID
     ) || false;
+
   // validate the service
   let validService = false;
   try {
@@ -48,4 +54,13 @@ export const createAppointmentValidator = async (appointmentInput, user) => {
     validVehicle &&
     !!validService
   );
+};
+
+/**
+ * validate is the user same as the person who creates this appointment
+ * @param {String} currentId
+ * @param {String} userId
+ */
+export const creatorValidator = (currentId, userId) => {
+  return currentId === userId;
 };

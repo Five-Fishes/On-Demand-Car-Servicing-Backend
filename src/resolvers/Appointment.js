@@ -1,9 +1,12 @@
 import { ApolloError, UserInputError } from "apollo-server-express";
 import mongoose from "mongoose";
 
-import { Appointment, User, Branch, Service } from "../models";
+import { Appointment, User, Branch } from "../models";
 import { FFInvalidFilterError } from "../utils/error";
-import { createAppointmentValidator } from "../utils/validator";
+import {
+  appointmentInputValidator,
+  creatorValidator,
+} from "../utils/validator";
 import {
   APPOINTMENT_STATUS,
   USER_TYPE,
@@ -85,7 +88,7 @@ const AppointmentResolver = {
       if (appointmentInput === null) {
         return new ApolloError("Invalid input for new Appointment");
       }
-      const validInput = await createAppointmentValidator(
+      const validInput = await appointmentInputValidator(
         appointmentInput,
         user
       );
@@ -103,69 +106,174 @@ const AppointmentResolver = {
       const appointment = await Appointment.create(appointmentInput);
       return appointment;
     },
-    async updateAppointment(_, { appointmentInput }) {
+    async updateAppointment(_, { appointmentInput }, context, info) {
+      /**
+       * - check input validity
+       * - create appointment
+       */
+
+      /**
+       * destructure user
+       */
+      const { user } = context;
+
       if (!appointmentInput.id) {
         return new UserInputError(
           "Unable to update Appointment with invalid id"
         );
       }
+
+      /**
+       * validate input
+       */
+      const validInput = await appointmentInputValidator(
+        appointmentInput,
+        user
+      );
+      if (validInput !== true) {
+        return validInput === false
+          ? new UserInputError("Please check Date/Vehicle input", {
+              Details: appointmentInput,
+            })
+          : validInput;
+      }
+
+      /**
+       * get original appointment
+       */
+      let originalAppointment = null;
       try {
-        let oldAppointment = await Appointment.findById(appointmentInput.id);
-        if (oldAppointment) {
-          const CustomerID = await User.findById(appointmentInput.CustomerID);
-          if (!CustomerID) {
-            return new UserInputError("Customer ID does not exist");
-          }
-          const BranchID = await Branch.findById(appointmentInput.BranchID);
-          if (!BranchID) {
-            return new UserInputError("Branch ID does not exist");
-          }
-          // TO DO: Add service data
-          // const ServiceID = await Service.findById(appointmentInput.ServiceID);
-          // if(!ServiceID){
-          //   return new UserInputError("Service ID does not exist")
-          // }
-          if (
-            appointmentInput.AppointmentStatus ===
-              APPOINTMENT_STATUS.CANCELLED ||
-            appointmentInput.AppointmentStatus === APPOINTMENT_STATUS.REJECTED
-          ) {
-            return new UserInputError(
-              "Cancelled/Rejected Appointment cannot be updated."
-            );
-          }
-          // Unable to check if VehicleID exist or not (NO)
-          if (appointmentInput.VehicleID === null) {
-            return new UserInputError("Vehicle ID is null");
-          }
-        } else {
-          return new UserInputError("Appointment is not found with id");
+        originalAppointment = await Appointment.findById(appointmentInput.id);
+
+        if (originalAppointment === null) {
+          return new ApolloError(`No appointment with ID: ${id}`);
         }
-        let appointment = await Appointment.findByIdAndUpdate(
+      } catch (error) {
+        return ApolloError(
+          `Error whiile searching Appoontment with ID: ${appointmentInput.id}`
+        );
+      }
+
+      /**
+       * disallow update of appointments that are:
+       * - rejected
+       * - cancelled
+       * - completed
+       */
+      const isImmutable =
+        originalAppointment.appointmentStatus ===
+          APPOINTMENT_STATUS.CANCELLED ||
+        originalAppointment.appointmentStatus === APPOINTMENT_STATUS.REJECTED ||
+        originalAppointment.appointmentStatus === APPOINTMENT_STATUS.COMPLETED;
+      if (isImmutable) {
+        return new UserInputError(
+          `Appointment has been ${originalAppointment.appointmentState}. Update is prohibited`
+        );
+      }
+
+      /**
+       * perform updates
+       */
+      try {
+        const updatedAppointment = await Appointment.findByIdAndUpdate(
           appointmentInput.id,
-          {
-            ...appointmentInput,
-          },
+          appointmentInput,
           { new: true }
         );
-        return appointment;
-      } catch (err) {
-        return new ApolloError(err.message, 500);
+        return updatedAppointment;
+      } catch (error) {
+        return new ApolloError(
+          `Unable to update appointment ${appointmentInput.id}`,
+          { Details: appointmentInput }
+        );
       }
     },
-    async deleteAppointment(_, { id }) {
-      if (!id) {
-        return new UserInputError("No id is provided");
-      } else {
-        try {
-          const appointment = await Appointment.findById(id);
-          if (appointment) {
-            let deleted = await Appointment.findByIdAndRemove(id);
-            return deleted;
-          }
-        } catch (err) {
-          return new ApolloError(err.message, 500);
+    async deleteAppointment(_, { id }, context) {
+      /**
+       * - only allow creator to delete
+       * - started/ended appointment cannot be deleted
+       * - cancelled/rejected/completed cannot be deleted
+       */
+
+      /**
+       * destructure context to get user
+       */
+      const { user } = context;
+
+      /**
+       * only customer can delete appointment
+       */
+      const hasAccessRight = user.type === USER_TYPE.CUSTOMER;
+      if (!hasAccessRight)
+        return new ApolloError(
+          `User type ${user.type} cannot delete appointment`,
+          NO_ACCESS_RIGHT_CODE
+        );
+
+      /**
+       * get original appointment to check whether user is the customer
+       */
+      let originalAppointment = null;
+      try {
+        originalAppointment = await Appointment.findById(id);
+
+        if (originalAppointment === null) {
+          return new ApolloError(`No appointment with ID: ${id}`);
         }
+      } catch (error) {
+        return new ApolloError(
+          `Error while looking for appointment with ID: ${id}`,
+          500,
+          { Details: error }
+        );
+      }
+
+      const isCreator = creatorValidator(
+        originalAppointment.customerID,
+        user.id
+      );
+      if (!isCreator) {
+        return UserInputError(
+          "User cannot delete because this appointment is created by another user"
+        );
+      }
+
+      /**
+       * check started/ended
+       */
+      const startedOrEnded =
+        new Date(originalAppointment.appointmentDate) < Date.now();
+      if (startedOrEnded) {
+        return new ApolloError(
+          "Started or Ended apppointemnt cannot be deleted",
+          500
+        );
+      }
+
+      /**
+       * check completed/cancelled/rejected
+       */
+      const isImmutable =
+        originalAppointment.appointmentStatus ===
+          APPOINTMENT_STATUS.CANCELLED ||
+        originalAppointment.appointmentStatus === APPOINTMENT_STATUS.REJECTED ||
+        originalAppointment.appointmentStatus === APPOINTMENT_STATUS.COMPLETED;
+      if (isImmutable) {
+        return new UserInputError(
+          `Appointment has been ${originalAppointment.appointmentState}. Delete is prohibited`
+        );
+      }
+
+      /**
+       * perform deletion
+       */
+      try {
+        const deletedAppointment = await Appointment.findByIdAndDelete(id);
+        return deletedAppointment;
+      } catch (error) {
+        return new ApolloError("Error while deleting appointment", 500, {
+          Details: error,
+        });
       }
     },
   },
