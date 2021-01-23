@@ -9,27 +9,34 @@ export default gql`
   extend type Mutation {
     createAppointment(appointmentInput: AppointmentInput!): Appointment!
     updateAppointment(appointmentInput: AppointmentInput!): Appointment!
-    deleteAppointment(appointmentId: String!): Appointment!
+    deleteAppointment(id: String!): Appointment!
   }
 
   input AppointmentInput {
-    id: ID!
-    AppointmentDate: String!
-    CustomerID: Int!
-    BranchID: Int!
-    VehichleID: Int!
-    ServiceID: Int!
-    AppointmentStatus: String!
+    id: ID
+    appointmentDate: String!
+    customerID: String!
+    branchID: String!
+    vehicleID: String!
+    serviceID: String!
+    appointmentStatus: AppointmentStatus!
+  }
+
+  enum AppointmentStatus {
+    PENDING
+    REJECTED
+    ACCEPTED
+    COMPLETED
+    CANCELLED
   }
 
   type Appointment {
     id: ID!
-    AppointmentDate: String!
-    CustomerID: Int!
-    BranchID: Int!
-    VehichleID: Int!
-    ServiceID: Int!
-    AppointmentStatus: String!
+    appointmentDate: String!
+    customerID: String!
+    branchID: String!
+    vehicleID: String!
+    serviceID: String!
+    appointmentStatus: AppointmentStatus!
   }
-
 `;

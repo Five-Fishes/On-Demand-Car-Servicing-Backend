@@ -43,14 +43,7 @@ const BranchSchema = new mongoose.Schema(
         close: String,
       },
     },
-    services: [
-      {
-        serviceNm: String,
-        isDispatchAvailable: Boolean,
-        isInHouseAvailable: Boolean,
-        estimatedServiceTime: mongoose.Decimal128,
-      },
-    ],
+    services: [String],
   },
   {
     timestamps: true,

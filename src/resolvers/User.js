@@ -131,7 +131,6 @@ const UserResolver = {
       /**
        * Validate overall user signup input
        */
-      console.log("userInput :>> ", userInput);
       const isValidInput = validateSignUp(userInput);
       if (!isValidInput) {
         return new UserInputError(

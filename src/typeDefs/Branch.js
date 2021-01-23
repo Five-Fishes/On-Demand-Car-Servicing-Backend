@@ -9,20 +9,20 @@ export default gql`
   extend type Mutation {
     createBranch(branchInput: BranchInput!): Branch!
     updateBranch(branchInput: BranchInput!): Branch!
-    deleteBranch(branchId: String!): Branch!
+    deleteBranch(id: String!): Branch!
   }
 
   input BranchInput {
-    id: ID!
+    id: ID
     companyId: String!
     branchAddr: String!
     branchContactNo: String!
     hasDispatchService: Boolean
-    businesshours: BusinesshoursInput!
-    services: [ServicesInput!]
+    businesshours: BusinessHoursInput!
+    services: [String!]
   }
 
-  input BusinesshoursInput {
+  input BusinessHoursInput {
     mon: DayInput!
     tue: DayInput!
     wed: DayInput!
@@ -32,30 +32,23 @@ export default gql`
     sun: DayInput!
   }
 
-  input DayInput{
+  input DayInput {
     open: String!
     break: String!
     close: String!
   }
 
-  input ServicesInput {
-    serviceNm: String!
-    isDispatchAvailable: Boolean
-    isInHouseAvailable: Boolean
-    estimatedServiceTime: Float
-  }
-
-  type Branch{
+  type Branch {
     id: ID!
     companyId: String!
     branchAddr: String!
     branchContactNo: String!
     hasDispatchService: Boolean!
-    businesshours: Businesshours!
-    services: [Services!]
+    businesshours: BusinessHours!
+    services: [Service!]
   }
 
-  type Businesshours {
+  type BusinessHours {
     mon: Day!
     tue: Day!
     wed: Day!
@@ -70,12 +63,4 @@ export default gql`
     break: String!
     close: String!
   }
-
-  type Services {
-    serviceNm: String!
-    isDispatchAvailable: Boolean!
-    isInHouseAvailable: Boolean!
-    estimatedServiceTime: Float!
-  }
-
 `;
