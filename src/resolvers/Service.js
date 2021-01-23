@@ -1,6 +1,8 @@
+import { ApolloError, UserInputError } from "apollo-server";
+
 import { Service } from "../models";
 import { USER_TYPE, EMPLOYEE_TYPE } from "../constants";
-import { ApolloError, UserInputError } from "apollo-server";
+import { estimatedServiceTimeConverter } from "../utils/converter";
 
 /**
  * Validate if the user trying to access this mutation is a manager or brand owner
@@ -14,11 +16,6 @@ const roleValidator = (type, employeeType) => {
     type === USER_TYPE.BRANDOWNER ||
     (type === USER_TYPE.EMPLOYEE && employeeType === EMPLOYEE_TYPE.MANAGER)
   );
-};
-
-const estimatedServiceTimeConverter = (service) => {
-  service._doc.estimatedServiceTime = service._doc.estimatedServiceTime.toString();
-  return service;
 };
 
 const ServiceResolver = {

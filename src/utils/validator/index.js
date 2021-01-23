@@ -8,3 +8,4 @@ export {
   appointmentInputValidator as appointmentInputValidator,
   creatorValidator as creatorValidator,
 } from "./AppointmentInputValidator";
+export { servicesValidator as servicesValidator } from "./BranchInputValidator";
