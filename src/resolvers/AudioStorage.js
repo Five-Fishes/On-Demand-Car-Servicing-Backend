@@ -1,11 +1,11 @@
 import { ApolloError, UserInputError } from "apollo-server-express";
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 import { AudioStorage } from "../models";
 import { FFInvalidFilterError } from "../utils/error";
 
 /**
- * format the Decimal128 tyoe to graphql float compliance pattern
+ * Format the mongodb's Decimal128 output type to graphql Float compliance pattern
  * @param {Object} audioStorageInput
  */
 const audioLengthConverter = (audioStorageInput) => {
