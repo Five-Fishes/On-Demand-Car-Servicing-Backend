@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 
 import { User, Company } from "../models";
 import { FFInvalidFilterError } from "../utils/error";
+import { USER_TYPE } from "../constants";
 
 const CompanyResolver = {
   Query: {
@@ -63,57 +64,173 @@ const CompanyResolver = {
   },
   Mutation: {
     createCompany: async (root, { companyInput }, context, info) => {
-      if (companyInput === null) {
-        return new ApolloError("Invalid input for new Company");
+      /**
+       * - validate input
+       *  - is name taken?
+       *  - is owner ID valid?
+       */
+      if (companyInput.id !== null) {
+        return new ApolloError("ID should be null while creating company");
       }
-      const ownerID = await User.findById(companyInput.ownerID);
-      if (ownerID) {
-        const company = await Company.create(companyInput);
-        return company;
-      } else {
-        return new UserInputError("Owner is not a registered as user.");
+
+      /**
+       * validate company name
+       */
+      try {
+        const existingCompany = await Company.findOne({
+          companyNm: { $eq: companyInput.companyNm },
+        });
+        if (existingCompany) {
+          return new ApolloError(
+            `Name ${companyInput.companyNm} is taken`,
+            500
+          );
+        }
+      } catch (error) {
+        return new ApolloError(
+          `Error while validating name: ${companyInput.companyNm}`,
+          500,
+          { Details: error }
+        );
+      }
+
+      /**
+       * validate owner ID
+       */
+      try {
+        const owner = await User.findById(companyInput.ownerID);
+        if (owner === null) {
+          return new ApolloError(
+            `Error validating owner with ID: ${companyInput.ownerID}`,
+            500
+          );
+        }
+        if (owner.type !== USER_TYPE.BRANDOWNER) {
+          return new ApolloError(
+            `Only User type ${USER_TYPE.BRANDOWNER} can create company`
+          );
+        }
+      } catch (error) {
+        return new ApolloError(
+          `Error validating owner ID: ${companyInput.ownerID}`
+        );
+      }
+
+      /**
+       * create company
+       */
+      try {
+        const newCompany = await Company.create(companyInput);
+        return newCompany;
+      } catch (error) {
+        return new ApolloError("Error creating company", 500, {
+          Details: error,
+        });
       }
     },
     updateCompany: async (root, { companyInput }, context, info) => {
-      if (!companyInput.id) {
-        return new UserInputError("Unable to update Company with invalid id");
+      /**
+       * - only owner can update
+       * - check new name validity
+       */
+
+      /**
+       * destructure context to get user
+       */
+      const { user } = context;
+      if (user.id !== companyInput.ownerID) {
+        return new ApolloError(
+          `Only User ${companyInput.ownerID} can update this company details`,
+          500
+        );
       }
+
+      /**
+       * validate company name
+       */
       try {
-        let company = await Company.findById(companyInput.id);
-        if (company) {
-          const ownerID = await User.findById(companyInput.ownerID);
-          if (!ownerID) {
-            return new UserInputError("No owner found with id");
-          }
-          let updateCompany = await Company.findByIdAndUpdate(
-            companyInput.id,
-            {
-              ...companyInput,
-            },
-            { new: true }
+        const existingCompany = await Company.findOne({
+          companyNm: { $eq: companyInput.companyNm },
+        });
+        if (existingCompany && existingCompany.id !== companyInput.id) {
+          return new ApolloError(
+            `Name ${companyInput.companyNm} is taken`,
+            500
           );
-          return updateCompany;
-        } else {
-          return new UserInputError("No company found by id");
         }
-      } catch (err) {
-        return new ApolloError(err.message, 500);
+      } catch (error) {
+        return new ApolloError(
+          `Error while validating name: ${companyInput.companyNm}`,
+          500,
+          { Details: error }
+        );
+      }
+
+      /**
+       * perform update
+       */
+      try {
+        const updatedCompany = await Company.findByIdAndUpdate(
+          companyInput.id,
+          companyInput,
+          { new: true }
+        );
+        return updatedCompany;
+      } catch (error) {
+        return new ApolloError(
+          `Failed to update Company ${companyInput.id}`,
+          500,
+          { Details: companyInput }
+        );
       }
     },
     deleteCompany: async (root, { id }, context, info) => {
-      if (!id) {
-        return new UserInputError("Invalid ID unable to delete Company");
+      /**
+       * - validate id
+       * - validate is owner
+       * - perform delete
+       */
+
+      /**
+       * destructure context to get user
+       */
+      const { user } = context;
+
+      /**
+       * validate id
+       */
+      const invalid_input = !mongoose.Types.ObjectId.isValid(id);
+      if (invalid_input) {
+        return new UserInputError("Invalid ID number provided");
       }
+
+      /**
+       * validate is owner
+       */
       try {
         const company = await Company.findById(id);
-        if (company) {
-          const deleted = await Company.findByIdAndRemove(id);
-          return deleted;
-        } else {
-          return new UserInputError("Company ID is not found.");
+        if (user.id !== company.ownerID) {
+          return new ApolloError(
+            `Only User ${companyInput.ownerID} can delete this company`,
+            500
+          );
         }
-      } catch (err) {
-        return new ApolloError(err.message, 500);
+      } catch (error) {
+        return new ApolloError(`Company with ID: ${id} not found`, 500, {
+          Details: error,
+        });
+      }
+
+      /**
+       * perform delete
+       */
+      try {
+        const deletedCompany = await Company.findByIdAndDelete(id);
+        return deletedCompany;
+      } catch (error) {
+        return new ApolloError(`Error while deleting ${id}`, 500, {
+          Details: error,
+        });
       }
     },
   },
