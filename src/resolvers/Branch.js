@@ -1,4 +1,5 @@
 import { ApolloError, UserInputError } from "apollo-server-express";
+import mongoose from "mongoose";
 
 import { Branch, Service, Company } from "../models";
 import { USER_TYPE, NO_ACCESS_RIGHT_CODE } from "../constants";
@@ -48,9 +49,13 @@ const BranchResolver = {
        */
       try {
         const filteredBranches = await Branch.find(filter);
-        const formattedBranches = filteredBranches.map((branch) =>
-          branchConverter(branch)
-        );
+
+        let formattedBranches = [];
+        for (const branch of filteredBranches) {
+          const formattedBranch = await branchConverter(branch);
+          formattedBranches.push(formattedBranch);
+        }
+
         return formattedBranches;
       } catch (err) {
         return new UserInputError("No branches are found with filter");
@@ -62,13 +67,19 @@ const BranchResolver = {
        * - get by id
        */
 
-      const invalid_input = id.length === 0;
+      const invalid_input =
+        id.length === 0 || !mongoose.Types.ObjectId.isValid(id);
       if (invalid_input) {
         return new UserInputError("Invalid ID number provided");
       }
+
+      /**
+       * get by id
+       */
       try {
         const branch = await Branch.findById(id);
-        return branch;
+        const formattedBranch = await branchConverter(branch);
+        return formattedBranch;
       } catch (err) {
         return new ApolloError(err.message, 500);
       }
