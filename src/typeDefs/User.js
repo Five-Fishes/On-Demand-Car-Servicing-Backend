@@ -29,12 +29,14 @@ export default gql`
     firstName: String!
     lastName: String!
     password: String!
+    confirmPassword: String
     dateOfBirth: String!
     contactNo: String!
     email: String!
     ip: String
     vehicle: [VehicleInput!]
     employeeType: String
+    employmentBranch: String
     favouriteBranch: [FavouriteBranchInput!]
   }
 
