@@ -6,19 +6,19 @@ const MessageSchema = new mongoose.Schema(
     messageTime: Date,
     messageType: String, // Image|Audio|Video|Text
     messageText: String, // Text|URL
-    image: {
+    messageImage: {
       imageSize: mongoose.Decimal128,
       imageURL: String,
       imageFileNm: String,
       imageType: String,
     },
-    audio: {
+    messageAudio: {
       audioContent: Buffer,
       audioURL: String,
       audioType: String,
       audioLength: mongoose.Decimal128,
     },
-    video: {
+    messageVideo: {
       videoSize: mongoose.Decimal128,
       videoURL: String,
       videoFileNm: String,

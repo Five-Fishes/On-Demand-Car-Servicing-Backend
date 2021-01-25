@@ -89,14 +89,20 @@ const MessageResolver = {
 
 const convertMessageDecimalContent = (message) => {
   if (message._doc.messageType === MessageType.AUDIO) {
-    message._doc.audio.audioLength = message._doc.audio.audioLength.toString();
+    message._doc.messageAudio.audioLength = message._doc.messageAudio.audioLength.toString();
   }
   if (message._doc.messageType === MessageType.IMAGE) {
-    message._doc.image.imageSize = message._doc.image.imageSize.toString();
+    message._doc.messageImage.imageSize = message._doc.messageImage.imageSize.toString();
   }
   if (message._doc.messageType === MessageType.VIDEO) {
-    message._doc.video.videoSize = message._doc.video.videoSize.toString();
+    message._doc.messageVideo.videoSize = message._doc.messageVideo.videoSize.toString();
   }
+  message.image = message.messageImage.imageURL;
+  message.video = message.messageVideo.videoURL;
+  message.audio = message.messageAudio.audioURL;
+  message.text = message.messageText;
+  message.user = message.sender;
+  console.log(message)
   return message;
 }
 

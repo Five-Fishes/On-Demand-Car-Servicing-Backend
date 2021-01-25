@@ -19,14 +19,20 @@ export default gql`
   }
 
   type Message {
-    id: ID!
+    id: ID
+    _id: ID
+    image: String
+    video: String
+    audio: String
+    text: String
     chatID: ID!
     messageType: MessageType!
     messageText: String
-    image: MessageImage
-    audio: MessageAudio
-    video: MessageVideo
+    messageImage: MessageImage
+    messageAudio: MessageAudio
+    messageVideo: MessageVideo
     sender: MessageSender!
+    user: MessageUser
     createdAt: String!
   }
 
@@ -54,6 +60,12 @@ export default gql`
   type MessageSender {
     id: ID!
     type: String!
+    firstName: String!
+    lastName: String!
+  }
+
+  type MessageUser {
+    _id: ID!
     firstName: String!
     lastName: String!
   }
