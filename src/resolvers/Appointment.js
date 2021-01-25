@@ -1,7 +1,7 @@
 import { ApolloError, UserInputError } from "apollo-server-express";
 import mongoose from "mongoose";
 
-import { Appointment, User, Branch } from "../models";
+import { Appointment, User, Branch, Service } from "../models";
 import { FFInvalidFilterError } from "../utils/error";
 import { appointmentInputValidator, roleValidator } from "../utils/validator";
 import {
@@ -9,6 +9,29 @@ import {
   USER_TYPE,
   NO_ACCESS_RIGHT_CODE,
 } from "../constants";
+
+const mapCustomer = async (appointment) => {
+  const user = await User.findById(appointment.customerID);
+  appointment.customer = {...user._doc}
+  return appointment;
+}
+const mapBranch = async (appointment) => {
+  const branch = await Branch.findById(appointment.branchID);
+  console.log(branch)
+  appointment.branch = {...branch._doc}
+  return appointment;
+}
+const mapService = async (appointment) => {
+  const service = await Service.findById(appointment.serviceID);
+  appointment.service = {...service._doc}
+  return appointment;
+}
+const mapVehicle = async (appointment) => {
+  const user = await User.findById(appointment.customerID);
+  const vehicle = user.vehicle.filter(data => data.id === appointment.vehicleID);
+  appointment.vehicle = {...vehicle[0]._doc}
+  return appointment;
+}
 
 const AppointmentResolver = {
   Query: {
@@ -34,7 +57,14 @@ const AppointmentResolver = {
        */
       try {
         const filteredAppointments = await Appointment.find(filter);
-        return filteredAppointments;
+        return filteredAppointments.map(async (data) => {
+          await mapBranch(data);
+          await mapCustomer(data);
+          await mapVehicle(data);
+          await mapService(data);
+          return data;
+        })
+        // return filteredAppointments;
       } catch (err) {
         return new ApolloError(err.message, 500);
       }
@@ -54,6 +84,10 @@ const AppointmentResolver = {
        * find by id
        */
       const appointment = await Appointment.findById(id);
+      await mapCustomer(appointment);
+      await mapBranch(appointment);
+      await mapService(appointment);
+      await mapVehicle(appointment);
       return appointment;
     },
   },

@@ -33,10 +33,14 @@ export default gql`
   type Appointment {
     id: ID!
     appointmentDate: String!
-    customerID: AppointmentCustomer!
-    branchID: AppointmentBranch!
-    vehicleID: String!
-    serviceID: AppointmentService!
+    customerID: String
+    branchID: String
+    vehicleID: String
+    serviceID: String
+    customer: AppointmentCustomer
+    branch: AppointmentBranch
+    vehicle: Vehicle
+    service: AppointmentService
     appointmentStatus: AppointmentStatus!
   }
 
