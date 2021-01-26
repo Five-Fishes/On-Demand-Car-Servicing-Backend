@@ -17,19 +17,18 @@ const mapCustomer = async (appointment) => {
 }
 const mapBranch = async (appointment) => {
   const branch = await Branch.findById(appointment.branchID);
-  console.log(branch)
   appointment.branch = {...branch._doc}
   return appointment;
 }
 const mapService = async (appointment) => {
   const service = await Service.findById(appointment.serviceID);
-  appointment.service = {...service._doc}
+  appointment.service = {...service}
   return appointment;
 }
 const mapVehicle = async (appointment) => {
   const user = await User.findById(appointment.customerID);
   const vehicle = user.vehicle.filter(data => data.id === appointment.vehicleID);
-  appointment.vehicle = {...vehicle[0]._doc}
+  appointment.vehicle = {...vehicle[0]}
   return appointment;
 }
 
