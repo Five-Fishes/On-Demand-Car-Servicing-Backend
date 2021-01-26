@@ -57,14 +57,17 @@ export default gql`
     foremanDepartTime: String
     estimatedArrivalTime: String
     status: DispatchServiceStatus!
+    createdAt: String
   }
 
   type DispacthServiceBranch {
+    id: ID
     branchAddr: String!
     branchContactNo: String!
   }
 
   type DispatchServiceEmployee {
+    id: ID
     firstName: String!
     lastName: String!
     contactNo: String!
@@ -74,6 +77,7 @@ export default gql`
   }
 
   type DispatchServiceCustomer {
+    id: ID
     firstName: String!
     lastName: String!
     contactNo: String!
@@ -81,6 +85,7 @@ export default gql`
   }
 
   type DispatchServiceVehicle {
+    id: ID
     vehicleType: String!
     vehicleBrand: String!
     vehicleModel: String!
@@ -88,6 +93,7 @@ export default gql`
   }
 
   type DispatchServiceDetails {
+    id: ID
     serviceNm: String!
     estimatedServiceTime: Float!
   }

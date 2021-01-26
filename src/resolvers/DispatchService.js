@@ -94,7 +94,8 @@ const DispatchServiceResolver = {
           .populate("customer")
           .populate("employee")
           .populate("service")
-          .populate("branch");
+          .populate("branch")
+          .sort({status: "desc", createdAt: "desc"});
         dispatchServices.map(data => convertEstimatedServiceTime(data));
         return dispatchServices;
       } catch(err) {
