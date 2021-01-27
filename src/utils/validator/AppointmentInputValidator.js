@@ -31,13 +31,6 @@ export const appointmentInputValidator = async (appointmentInput, user) => {
     });
   }
 
-  // validate vehicle
-  const customer = await User.findById(user.id);
-  const validVehicle =
-    customer.vehicle.find(
-      (vehicle) => vehicle._id.toString() === appointmentInput.vehicleID
-    ) || false;
-
   // validate the service
   let validService = false;
   try {
@@ -49,7 +42,7 @@ export const appointmentInputValidator = async (appointmentInput, user) => {
   }
 
   return (
-    validDate && validRole && !!validBranch && validVehicle && !!validService
+    validDate && validRole && !!validBranch && !!validService
   );
 };
 
