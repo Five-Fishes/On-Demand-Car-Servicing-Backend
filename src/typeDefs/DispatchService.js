@@ -23,10 +23,10 @@ export default gql`
   input DispatchServiceInput {
     id: ID
     dispatchTimeStamp: String!
-    branch: ID!
-    employee: ID!
-    customer: ID!
-    service: ID!
+    branch: String!
+    employee: String!
+    customer: String!
+    service: String!
     vehicle: DispatchServiceVehicleInput!
     customerLocationDesc: String!
     serviceLocation: String!
