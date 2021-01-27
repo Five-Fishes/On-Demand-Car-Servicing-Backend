@@ -27,8 +27,10 @@ const mapService = async (appointment) => {
 }
 const mapVehicle = async (appointment) => {
   const user = await User.findById(appointment.customerID);
-  const vehicle = user.vehicle.filter(data => data.id === appointment.vehicleID);
-  appointment.vehicle = {...vehicle[0]}
+  const vehicle = await user.vehicle.filter(data => {
+    return data.id.toString() === appointment.vehicleID.toString()
+  });
+  appointment.vehicle = vehicle.length > 0 ? {...vehicle[0]._doc} : {}
   return appointment;
 }
 
@@ -118,6 +120,15 @@ const AppointmentResolver = {
       if (appointmentInput === null) {
         return new ApolloError("Invalid input for new Appointment");
       }
+      // validate vehicle
+      const customer = await User.findById(user.id);
+      const validVehicle =
+        customer.vehicle.find(
+          (vehicle) => vehicle._id.toString() === appointmentInput.vehicleID.toString()
+        ) || false;
+      if (!validVehicle) {
+        return new UserInputError("Vehicle seleceted not belong to customer");
+      }
       const validInput = await appointmentInputValidator(
         appointmentInput,
         user
@@ -162,7 +173,7 @@ const AppointmentResolver = {
       );
       if (validInput !== true) {
         return validInput === false
-          ? new UserInputError("Please check Date/Vehicle input", {
+          ? new UserInputError("Please check Date of appointment", {
               Details: appointmentInput,
             })
           : validInput;
